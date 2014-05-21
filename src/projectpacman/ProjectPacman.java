@@ -7,7 +7,7 @@
 package projectpacman;
 
 import java.awt.Dimension;
-import static javax.swing.JFrame.EXIT_ON_CLOSE;
+import javax.swing.JFrame;
 
 /**
  *
@@ -19,8 +19,9 @@ public class ProjectPacman
     {
 	Scherm frame = new Scherm();
 	frame.setSize(new Dimension(600, 600));
+	frame.setResizable(false);
 	frame.setVisible(true);
-	frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	frame.setLocationRelativeTo(null);
     }
 
