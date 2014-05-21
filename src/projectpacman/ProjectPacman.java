@@ -14,7 +14,7 @@ public class ProjectPacman
 {
     public static void main(String[] args) 
     {
-	
+	int test = 0;
     }
 
 }
