@@ -14,7 +14,8 @@ public class ProjectPacman
 {
     public static void main(String[] args) 
     {
-	int test = 0;
+	Scherm frame = new Scherm();
+	frame.setVisible(true);
     }
 
 }
