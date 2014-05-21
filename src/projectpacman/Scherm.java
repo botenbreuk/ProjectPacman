@@ -23,13 +23,13 @@ public class Scherm extends JFrame
     }
     
     private void initComponents()// <editor-fold defaultstate="collapsed" desc="InitComponents">
-    {
-	this.setSize(new Dimension(600, 600));
-	this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-	this.setLocationRelativeTo(null);
-	
+    {	
 	this.panel = new JPanel();
 	
-	this.add(panel, BorderLayout.CENTER);
+	panel.setBackground(Color.red);
+	panel.setSize(new Dimension(200, 200));
+	panel.add(new Vak(15, 20));
+	
+	repaint();
     }//</editor-fold>
 }
