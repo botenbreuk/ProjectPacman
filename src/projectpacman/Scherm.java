@@ -6,7 +6,7 @@
 
 package projectpacman;
 
-import java.awt.*;
+import java.awt.Dimension;
 import javax.swing.*;
 
 /**
@@ -22,14 +22,18 @@ public class Scherm extends JFrame
 	initComponents();
     }
     
+    
+    
     private void initComponents()// <editor-fold defaultstate="collapsed" desc="InitComponents">
     {	
-	this.panel = new JPanel();
+	this.setSize(new Dimension(600, 600));
+	this.setResizable(false);
+	this.setVisible(true);
+	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	this.setLocationRelativeTo(null);
 	
-	panel.setBackground(Color.red);
-	panel.setSize(new Dimension(200, 200));
-	panel.add(new Vak(15, 20));
-	
-	repaint();
+	Speelveld veld = new Speelveld();
+	this.add(veld);
     }//</editor-fold>
+    
 }

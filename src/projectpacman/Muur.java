@@ -10,7 +10,7 @@ package projectpacman;
  *
  * @author Robin
  */
-public abstract class Spelelement
+public class Muur extends Spelelement
 {
     
 }

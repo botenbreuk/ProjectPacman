@@ -12,9 +12,12 @@ import javax.swing.JPanel;
  *
  * @author Robin
  */
-public class Vak extends JPanel
+public class Vak
 {
     private Spelelement figuur;
+    
+    public Spelelement getSpelelement() { return this.figuur; }
+    public void setSpelelement(Spelelement spelel) { this.figuur = spelel; }
     
     public Vak()
     {
