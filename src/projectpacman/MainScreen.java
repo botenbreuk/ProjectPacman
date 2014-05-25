@@ -13,11 +13,11 @@ import javax.swing.*;
  *
  * @author Robin
  */
-public class Scherm extends JFrame 
+public class MainScreen extends JFrame 
 {
     private JPanel panel;
     
-    public Scherm()
+    public MainScreen()
     {
 	initComponents();
     }
@@ -32,8 +32,9 @@ public class Scherm extends JFrame
 	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	this.setLocationRelativeTo(null);
 	
-	Speelveld veld = new Speelveld();
+	Playfield veld = new Playfield();
 	this.add(veld);
+	veld.requestFocus();
     }//</editor-fold>
     
 }

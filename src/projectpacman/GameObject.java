@@ -10,6 +10,9 @@ package projectpacman;
  *
  * @author Robin
  */
-public class GameObject {
+public class GameObject 
+{
+    private Tile tile;
     
+    public Tile getTile() { return this.tile; }
 }

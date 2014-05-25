@@ -17,7 +17,7 @@ public class ProjectPacman
 {
     public static void main(String[] args) 
     {
-	Scherm frame = new Scherm();
+	MainScreen frame = new MainScreen();
     }
 
 }

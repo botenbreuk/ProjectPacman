@@ -19,6 +19,8 @@ public class Tile
     private int xPos;
     private int yPos;
     
+    public GameObject getGameObject() { return this.figure; }
+    
     public void setGameObject(GameObject gameObject) { this.figure = gameObject; }
     
     public Tile(int xPos, int yPos)
