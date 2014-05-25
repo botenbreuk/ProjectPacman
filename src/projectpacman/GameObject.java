@@ -10,7 +10,6 @@ package projectpacman;
  *
  * @author Robin
  */
-public class Pacman extends GameObject
-{
+public class GameObject {
     
 }

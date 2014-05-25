@@ -10,7 +10,10 @@ package projectpacman;
  *
  * @author Robin
  */
-public class Muur extends Spelelement
+public enum Direction 
 {
-    
+    NORTH,
+    EAST,
+    SOUTH,
+    WEST
 }

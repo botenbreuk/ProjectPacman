@@ -16,7 +16,7 @@ import javax.swing.JPanel;
  */
 public class Speelveld extends JPanel
 {
-    private Vak[][] vakken = new Vak[10][10];
+    private Tile[][] vakken = new Tile[10][10];
     
     public Speelveld()
     {
@@ -33,13 +33,13 @@ public class Speelveld extends JPanel
 	    {	
 		if((i == 0 || j == 0 || i == (vakken[i].length - 1) || j == (vakken.length - 1)))
 		{
-		    Vak vak = new Vak();
-		    vak.setSpelelement(new Muur());
+		    Tile vak = new Tile(i, j);
+		    vak.setGameObject(new Wall());
 		    vakken[i][j] = vak;
 		}
 		else
 		{
-		    vakken[i][j] = new Vak();
+		    vakken[i][j] = new Tile();
 		}
 	    }
 	}
