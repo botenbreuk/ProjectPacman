@@ -6,9 +6,6 @@
 
 package projectpacman;
 
-import java.awt.Dimension;
-import javax.swing.JFrame;
-
 /**
  *
  * @author Robin
@@ -19,5 +16,4 @@ public class ProjectPacman
     {
 	MainScreen frame = new MainScreen();
     }
-
 }
