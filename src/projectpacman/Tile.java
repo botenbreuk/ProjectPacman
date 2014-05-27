@@ -14,14 +14,16 @@ import java.util.HashMap;
  */
 public class Tile
 {
-    private HashMap<Direction, Tile> neighbours;
+    private HashMap<Direction, Tile> neighbours = new HashMap<Direction, Tile>();
     private GameObject figure;
     private int xPos;
     private int yPos;
     
     public GameObject getGameObject() { return this.figure; }
+    public Tile getNeigbour(Direction direction) { return this.neighbours.get(direction); }
     
     public void setGameObject(GameObject gameObject) { this.figure = gameObject; }
+    public void setNeighbour(Direction dir, Tile tile) { this.neighbours.put(dir, tile); }
     
     public Tile(int xPos, int yPos)
     {
@@ -29,8 +31,5 @@ public class Tile
 	this.yPos = yPos;
     }
     
-    public Tile getNeigbour(Direction direction)
-    {
-	return null;
-    }
+    
 }

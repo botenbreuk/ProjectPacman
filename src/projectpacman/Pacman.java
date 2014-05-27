@@ -48,7 +48,7 @@ public class Pacman extends GameObject implements KeyListener
     {
 	switch (d) {
 	    case NORTH:
-		super.getTile().getNeigbour(d);
+		System.out.println("Up pressed");
 		break;
 	    case EAST:
 		System.out.println("Right pressed");
