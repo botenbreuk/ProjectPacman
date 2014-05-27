@@ -14,10 +14,10 @@ import java.util.HashMap;
  */
 public class Tile
 {
-    private HashMap<Direction, Tile> neighbours = new HashMap<Direction, Tile>();
+    private final HashMap<Direction, Tile> neighbours;
     private GameObject figure;
-    private int xPos;
-    private int yPos;
+    private final int xPos;
+    private final int yPos;
     
     public GameObject getGameObject() { return this.figure; }
     public Tile getNeigbour(Direction direction) { return this.neighbours.get(direction); }
@@ -27,6 +27,7 @@ public class Tile
     
     public Tile(int xPos, int yPos)
     {
+	this.neighbours = new HashMap<>();
 	this.xPos = xPos;
 	this.yPos = yPos;
     }
