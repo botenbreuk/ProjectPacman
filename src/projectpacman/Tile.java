@@ -31,6 +31,4 @@ public class Tile
 	this.xPos = xPos;
 	this.yPos = yPos;
     }
-    
-    
 }
