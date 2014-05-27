@@ -15,4 +15,6 @@ public class GameObject
     private Tile tile;
     
     public Tile getTile() { return this.tile; }
+    
+    public void setTile(Tile tile) { this.tile = tile; }
 }

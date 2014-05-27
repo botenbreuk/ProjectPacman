@@ -30,7 +30,7 @@ public class Playfield extends JPanel
     {
 	layout = new int[][]
 	{
-	    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+	    {1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 	    {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1},
 	    {1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1},
 	    {1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1},
@@ -41,21 +41,18 @@ public class Playfield extends JPanel
 	    {1, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 1},
 	    {1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1},
 	    {1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1},
-	    {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1},
-	    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-	    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-	    {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1},
+	    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+	    {1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1},
+            {1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1},
+	    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 	    {1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1},
 	    {1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1},
 	    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 	    {1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1},
 	    {0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0},
 	    {1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1},
-	    {1, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 1},
-	    {1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1},
-	    {1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1},
-	    {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1},
-	    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+	    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+	    {1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
 	};
     }
     
@@ -63,44 +60,92 @@ public class Playfield extends JPanel
     {	
 	setLayout();
 	tiles = new Tile[layout.length][layout[0].length];
-	for (int i = 0; i < layout[i].length; i++) 
+	for (int i = 0; i < layout.length; i++) 
 	{
-	    for (int j = 0; j < layout.length; j++) 
+	    for (int j = 0; j < layout[0].length; j++) 
 	    {	
-		switch(layout[j][i])
+		switch(layout[i][j])
 		{
 		    default:
 		    case 0:
-			Tile empty = new Tile(i, j);
-			tiles[j][i] = empty;
+			Tile empty = new Tile(j, i);
+			tiles[i][j] = empty;
 			break;
 		    case 1:
-			Tile wall = new Tile(i, j);
-			wall.setGameObject(new Wall());
-			tiles[j][i] = wall;
+			Tile wallTile = new Tile(j, i);
+                        Wall wall = new Wall();
+                        wall.setTile(wallTile);
+			wallTile.setGameObject(wall);
+			tiles[i][j] = wallTile;
 			break;
 		    case 8:
-			Tile pacman = new Tile(i, j);
-			Pacman pac = new Pacman();
-			pacman.setGameObject(pac);
-			this.addKeyListener((KeyListener) pac);
-			tiles[j][i] = pacman;
+			Tile pacTile = new Tile(j, i);
+			Pacman pacman = new Pacman();
+                        pacman.setTile(pacTile);
+			pacTile.setGameObject(pacman);
+			this.addKeyListener((KeyListener) pacman);
+			tiles[i][j] = pacTile;
 			break;
 		}
 	    }
-	}	
+	}
+        setNeighbours();
     }
-
+    
+    private void setNeighbours()
+    {
+        for (int i = 0; i < tiles.length; i++) 
+        {
+            for (int j = 0; j < tiles[0].length; j++) 
+            {
+                if(i > 0)
+                {
+                    tiles[i][j].setNeighbour(Direction.NORTH, tiles[i - 1][j]);
+                }
+                if(i < tiles.length - 1)
+                {
+                    tiles[i][j].setNeighbour(Direction.SOUTH, tiles[i + 1][j]);
+                }
+                if(j > 0)
+                {
+                    tiles[i][j].setNeighbour(Direction.WEST, tiles[i][j - 1]);
+                }
+                if(j < tiles[0].length - 1)
+                {
+                    tiles[i][j].setNeighbour(Direction.EAST, tiles[i][j + 1]);
+                }
+                
+                
+                if(i == 0 && tiles[i][j].getGameObject() == null)
+                {
+                    tiles[i][j].setNeighbour(Direction.NORTH, tiles[tiles.length - 1][j]);
+                }
+                if(i == tiles.length - 1 && tiles[i][j].getGameObject() == null)
+                {
+                    tiles[i][j].setNeighbour(Direction.SOUTH, tiles[0][j]);
+                }
+                if(j == 0 && tiles[i][j].getGameObject() == null)
+                {
+                    tiles[i][j].setNeighbour(Direction.WEST, tiles[i][tiles[0].length - 1]);
+                }
+                if(j == tiles[0].length - 1 && tiles[i][j].getGameObject() == null)
+                {
+                    tiles[i][j].setNeighbour(Direction.EAST, tiles[i][0]);
+                }
+            }
+        }
+    }
+    
     @Override
     public void paint(Graphics g) 
     {	
 	
 	for (int i = 0; i < tiles.length; i++) 
 	{
-	    for (int j = 0; j < tiles[i].length; j++) 
+	    for (int j = 0; j < tiles[0].length; j++) 
 	    {		
-		int x = 25 * i;
-		int y = 25 * j;
+		int x = 25 * j;
+		int y = 25 * i;
 		
 		if(tiles[i][j].getGameObject() == null)
 		{
@@ -117,6 +162,7 @@ public class Playfield extends JPanel
 		    g.setColor(Color.YELLOW);
 		    g.fillRect(x, y, 25, 25);
 		}
+                repaint();
 	    }
 	}
     }

@@ -46,19 +46,46 @@ public class Pacman extends GameObject implements KeyListener
     
     private void move(Direction d)
     {
-	switch (d) {
-	    case NORTH:
-		System.out.println("Up pressed");
-		break;
-	    case EAST:
-		System.out.println("Right pressed");
-		break;
-	    case SOUTH:
-		System.out.println("Down pressed");
-		break;
-	    case WEST:
-		System.out.println("Left pressed");
-		break;
-	}
+	
+	    if(d == Direction.NORTH)
+            {
+		Tile tileNorth = super.getTile().getNeigbour(d);
+                if(tileNorth.getGameObject() instanceof Wall == false)
+                {
+                    super.getTile().setGameObject(null);
+                    tileNorth.setGameObject(this);
+                    super.setTile(tileNorth);
+                }
+            }
+	    if(d == Direction.EAST)
+            {
+		Tile tileEast = super.getTile().getNeigbour(d);
+                if(tileEast.getGameObject() instanceof Wall == false)
+                {
+                    super.getTile().setGameObject(null);
+                    tileEast.setGameObject(this);
+                    super.setTile(tileEast);
+                }
+            }
+	    if(d == Direction.SOUTH)
+            {
+		Tile tileSouth = super.getTile().getNeigbour(d);
+                if(tileSouth.getGameObject() instanceof Wall == false)
+                {
+                    super.getTile().setGameObject(null);
+                    tileSouth.setGameObject(this);
+                    super.setTile(tileSouth);
+                }
+            }
+	    if(d == Direction.WEST)
+            {
+		Tile tileWest = super.getTile().getNeigbour(d);
+                if(tileWest.getGameObject() instanceof Wall == false)
+                {
+                    super.getTile().setGameObject(null);
+                    tileWest.setGameObject(this);
+                    super.setTile(tileWest);
+                }
+            }
     }
 }

@@ -19,11 +19,14 @@ public class Tile
     private final int xPos;
     private final int yPos;
     
-    public GameObject getGameObject() { return this.figure; }
     public Tile getNeigbour(Direction direction) { return this.neighbours.get(direction); }
+    public GameObject getGameObject() { return this.figure; }
+    public int getXPos() { return this.xPos; }
+    public int getYPos() { return this.yPos; }
     
-    public void setGameObject(GameObject gameObject) { this.figure = gameObject; }
     public void setNeighbour(Direction dir, Tile tile) { this.neighbours.put(dir, tile); }
+    public void setGameObject(GameObject gameObject) { this.figure = gameObject; }
+    
     
     public Tile(int xPos, int yPos)
     {
