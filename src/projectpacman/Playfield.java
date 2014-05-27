@@ -17,60 +17,78 @@ import javax.swing.JPanel;
  */
 public class Playfield extends JPanel
 {
-    private Tile[][] tiles = new Tile[10][10];
+    private Tile[][] tiles;
+    private int[][] layout;
     
     public Playfield()
     {
 	this.setVisible(true);
-	createVakjes();
+	initLevel();
     }
     
-    private void createVakjes()
-    {	
-	
-	for (int i = 0; i < tiles.length; i++) 
+    private void setLayout()
+    {
+	layout = new int[][]
 	{
-	    for (int j = 0; j < tiles[1].length; j++) 
+	    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+	    {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1},
+	    {1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1},
+	    {1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1},
+	    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+	    {1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1},
+	    {0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0},
+	    {1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1},
+	    {1, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 1},
+	    {1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1},
+	    {1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1},
+	    {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1},
+	    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+	    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+	    {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1},
+	    {1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1},
+	    {1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1},
+	    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+	    {1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1},
+	    {0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0},
+	    {1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1},
+	    {1, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 1},
+	    {1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1},
+	    {1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1},
+	    {1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1},
+	    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+	};
+    }
+    
+    private void initLevel()
+    {	
+	setLayout();
+	tiles = new Tile[layout.length][layout[0].length];
+	for (int i = 0; i < layout[i].length; i++) 
+	{
+	    for (int j = 0; j < layout.length; j++) 
 	    {	
-		if((i == 0 || j == 0 || i == (tiles[i].length - 1) || j == (tiles.length - 1)))
+		switch(layout[j][i])
 		{
-		    Tile vak = new Tile(i, j);
-		    vak.setGameObject(new Wall());
-		    tiles[i][j] = vak;
-		}
-		else
-		{
-		    tiles[i][j] = new Tile(i, j);
+		    default:
+		    case 0:
+			Tile empty = new Tile(i, j);
+			tiles[j][i] = empty;
+			break;
+		    case 1:
+			Tile wall = new Tile(i, j);
+			wall.setGameObject(new Wall());
+			tiles[j][i] = wall;
+			break;
+		    case 8:
+			Tile pacman = new Tile(i, j);
+			Pacman pac = new Pacman();
+			pacman.setGameObject(pac);
+			this.addKeyListener((KeyListener) pac);
+			tiles[j][i] = pacman;
+			break;
 		}
 	    }
-	}
-	
-	tiles[2][2].setGameObject(new Wall());
-	tiles[3][2].setGameObject(new Wall());
-	tiles[4][2].setGameObject(new Wall());
-	tiles[6][2].setGameObject(new Wall());
-	tiles[7][2].setGameObject(new Wall());
-	
-	tiles[1][4].setGameObject(new Wall());
-	tiles[3][4].setGameObject(new Wall());
-	tiles[4][4].setGameObject(new Wall());
-	tiles[6][4].setGameObject(new Wall());
-	tiles[8][4].setGameObject(new Wall());
-	
-	GameObject pacman = new Pacman();
-	this.addKeyListener((KeyListener) pacman);
-	tiles[5][5].setGameObject(pacman);
-	
-	tiles[2][6].setGameObject(new Wall());
-	tiles[3][6].setGameObject(new Wall());
-	tiles[4][6].setGameObject(new Wall());
-	tiles[6][6].setGameObject(new Wall());
-	tiles[7][6].setGameObject(new Wall());
-	
-	tiles[1][6].setGameObject(new Wall());
-	tiles[3][8].setGameObject(new Wall());
-	tiles[6][8].setGameObject(new Wall());
-	tiles[6][7].setGameObject(new Wall());
+	}	
     }
 
     @Override
