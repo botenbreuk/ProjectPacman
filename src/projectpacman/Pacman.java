@@ -6,6 +6,8 @@
 
 package projectpacman;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -87,5 +89,15 @@ public class Pacman extends GameObject implements KeyListener
                     super.setTile(tileWest);
                 }
             }
+    }
+
+    @Override
+    public void draw(Graphics g) {
+	Tile tile = super.getTile();
+	int x = tile.getWidth() * tile.getXPos();
+	int y = tile.getHeight() * tile.getYPos();
+	
+	g.setColor(Color.YELLOW);
+	g.fillOval(x, y, tile.getWidth(), tile.getHeight());
     }
 }

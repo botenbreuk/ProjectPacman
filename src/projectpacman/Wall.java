@@ -6,6 +6,9 @@
 
 package projectpacman;
 
+import java.awt.Color;
+import java.awt.Graphics;
+
 /**
  *
  * @author Robin
@@ -13,4 +16,14 @@ package projectpacman;
 public class Wall extends GameObject
 {
     public Wall() { }
+
+    @Override
+    public void draw(Graphics g) {
+	Tile tile = super.getTile();
+	int x = tile.getWidth() * tile.getXPos();
+	int y = tile.getHeight() * tile.getYPos();
+	
+	g.setColor(new Color(67, 95, 222));
+	g.fillRect(x, y, tile.getWidth(), tile.getHeight());
+    }
 }

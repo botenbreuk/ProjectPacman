@@ -6,15 +6,19 @@
 
 package projectpacman;
 
+import java.awt.Graphics;
+
 /**
  *
  * @author Robin
  */
-public class GameObject 
+public abstract class GameObject 
 {
     private Tile tile;
     
     public Tile getTile() { return this.tile; }
     
     public void setTile(Tile tile) { this.tile = tile; }
+    
+    public abstract void draw(Graphics g);
 }
