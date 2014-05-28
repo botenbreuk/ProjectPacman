@@ -86,7 +86,7 @@ public class Playfield extends JPanel
 			break;
 		    case 6:
 			Tile doorTile = new Tile(j, i);
-			GhostDoor door = new GhostDoor();
+			GhostWall door = new GhostWall();
 			door.setTile(doorTile);
 			doorTile.setGameObject(door);
 			tiles[i][j] = doorTile;

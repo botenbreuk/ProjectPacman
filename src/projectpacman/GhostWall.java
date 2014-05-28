@@ -13,7 +13,7 @@ import java.awt.Graphics;
  *
  * @author Robin
  */
-public class GhostDoor extends Wall
+public class GhostWall extends Wall
 {
     @Override
     public void draw(Graphics g) {
