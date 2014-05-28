@@ -21,6 +21,7 @@ import javax.swing.*;
 public class MainScreen extends JFrame 
 {
     private JPanel panel;
+    private JPanel veldCont;
     private JButton close;
     private JButton start;
     
@@ -36,10 +37,13 @@ public class MainScreen extends JFrame
     private void initComponents()// <editor-fold defaultstate="collapsed" desc="InitComponents">
     {	
 	panel = new JPanel();
+	veldCont = new JPanel();
 	start = new JButton("Starten");
 	close = new JButton("Sluiten");
+	veld = new Playfield();
 	
-	this.setSize(new Dimension(480, 608));
+	this.setSize(475, 620);
+	this.setTitle("Pacman game");
 	this.setResizable(false);
 	this.setVisible(true);
 	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -62,19 +66,21 @@ public class MainScreen extends JFrame
 	});
 	
 	panel.setPreferredSize(new Dimension(this.getWidth(), 30));
+	veldCont.setPreferredSize(new Dimension(this.getWidth()- 20, 550));
 	start.setPreferredSize(new Dimension(80, 20));
 	close.setPreferredSize(new Dimension(80, 20));
-	
-	veld = new Playfield();
-	
+	veld.setPreferredSize(new Dimension(this.getWidth(), 550));
 	
 	panel.add(start);
 	panel.add(close);
+	veldCont.add(veld);
 	
-	this.add(veld);
+	this.add(veldCont, BorderLayout.CENTER);
 	this.add(panel, BorderLayout.NORTH);
 	
 	veld.requestFocus();
+	
+	pack();
     }//</editor-fold>
     
     private void closeActionPerformed(ActionEvent e)
@@ -84,6 +90,9 @@ public class MainScreen extends JFrame
     
     private void startActionPerformed(ActionEvent e)
     {	
-	
+//	veld = new Playfield();
+//	veld.setPreferredSize(new Dimension(this.getWidth(), 550));
+//	veldCont.add(veld);
+//	veld.requestFocus();
     }
 }
