@@ -74,7 +74,7 @@ public class MainScreen extends JFrame
 	veldCont.add(veld);
 	
 	this.add(veldCont, BorderLayout.CENTER);
-	this.add(panel, BorderLayout.NORTH);
+	this.add(panel, BorderLayout.SOUTH);
 	
 	veld.requestFocus();
 	

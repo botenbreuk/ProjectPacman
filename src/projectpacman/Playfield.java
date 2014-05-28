@@ -6,7 +6,6 @@
 
 package projectpacman;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyListener;
 import javax.swing.JPanel;
@@ -84,6 +83,13 @@ public class Playfield extends JPanel
 			dot.setTile(dotTile);
 			dotTile.setGameObject(dot);
 			tiles[i][j] = dotTile;
+			break;
+		    case 6:
+			Tile doorTile = new Tile(j, i);
+			GhostDoor door = new GhostDoor();
+			door.setTile(doorTile);
+			doorTile.setGameObject(door);
+			tiles[i][j] = doorTile;
 			break;
 		    case 8:
 			Tile pacTile = new Tile(j, i);
