@@ -30,32 +30,32 @@ public class Playfield extends JPanel
     {
 	layout = new int[][]
 	{
-	    {1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1},
-	    {1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-	    {1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1},
-	    {1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1},
-	    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-	    {1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1},
-	    {1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1},
-	    {1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1},
-	    {1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1},
-	    {1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1},
-	    {0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
-	    {1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1},
-	    {1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1},
-	    {1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1},
-	    {1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-	    {1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1},
-	    {1, 0, 0, 1, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 1, 0, 0, 1},
-	    {1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1},
-	    {1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1},
-	    {1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1},
-	    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-	    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1}
+	    {1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1},
+	    {1, 4, 4, 4, 4, 4, 4, 4, 4, 1, 4, 4, 4, 4, 4, 4, 4, 4, 1},
+	    {1, 4, 1, 1, 4, 1, 1, 1, 4, 1, 4, 1, 1, 1, 4, 1, 1, 4, 1},
+	    {1, 4, 1, 1, 4, 1, 1, 1, 4, 1, 4, 1, 1, 1, 4, 1, 1, 4, 1},
+	    {1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 1},
+	    {1, 4, 1, 1, 4, 1, 4, 1, 1, 1, 1, 1, 4, 1, 4, 1, 1, 4, 1},
+	    {1, 4, 4, 4, 4, 1, 4, 4, 4, 1, 4, 4, 4, 1, 4, 4, 4, 4, 4},
+	    {1, 1, 1, 1, 4, 1, 1, 1, 4, 1, 4, 1, 1, 1, 4, 1, 1, 1, 1},
+	    {0, 0, 0, 1, 4, 1, 4, 4, 4, 4, 4, 4, 4, 1, 4, 1, 0, 0, 0},
+	    {1, 1, 1, 1, 4, 1, 4, 1, 1, 6, 1, 1, 4, 1, 4, 1, 1, 1, 1},
+	    {4, 4, 4, 4, 4, 4, 4, 1, 0, 0, 0, 1, 4, 4, 4, 4, 4, 4, 4},
+	    {1, 1, 1, 1, 4, 1, 4, 1, 1, 1, 1, 1, 4, 1, 4, 1, 1, 1, 1},
+	    {0, 0, 0, 1, 4, 1, 4, 4, 4, 4, 4, 4, 4, 1, 4, 1, 0, 0, 0},
+	    {1, 1, 1, 1, 4, 1, 4, 1, 1, 1, 1, 1, 4, 1, 4, 1, 1, 1, 1},
+	    {1, 4, 4, 4, 4, 4, 4, 4, 4, 1, 4, 4, 4, 4, 4, 4, 4, 4, 1},
+	    {1, 4, 1, 1, 4, 1, 1, 1, 4, 1, 4, 1, 1, 1, 4, 1, 1, 4, 1},
+	    {1, 4, 4, 1, 4, 4, 4, 4, 4, 8, 4, 4, 4, 4, 4, 1, 4, 4, 1},
+	    {1, 1, 4, 1, 4, 1, 4, 1, 1, 1, 1, 1, 4, 1, 4, 1, 4, 1, 1},
+	    {1, 4, 4, 4, 4, 1, 4, 4, 4, 1, 4, 4, 4, 1, 4, 4, 4, 4, 1},
+	    {1, 4, 1, 1, 1, 1, 1, 1, 4, 1, 4, 1, 1, 1, 1, 1, 1, 4, 1},
+	    {1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 1},
+	    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1}
 	};
     }
     
-    private void initLevel()
+    public void initLevel()
     {	
 	setLayout();
 	tiles = new Tile[layout.length][layout[0].length];
@@ -68,6 +68,7 @@ public class Playfield extends JPanel
 		    default:
 		    case 0:
 			Tile empty = new Tile(j, i);
+			empty.setGameObject(null);
 			tiles[i][j] = empty;
 			break;
 		    case 1:
@@ -76,6 +77,13 @@ public class Playfield extends JPanel
                         wall.setTile(wallTile);
 			wallTile.setGameObject(wall);
 			tiles[i][j] = wallTile;
+			break;
+		    case 4:
+			Tile dotTile = new Tile(j, i);
+			Dot dot = new Dot();
+			dot.setTile(dotTile);
+			dotTile.setGameObject(dot);
+			tiles[i][j] = dotTile;
 			break;
 		    case 8:
 			Tile pacTile = new Tile(j, i);
@@ -115,19 +123,19 @@ public class Playfield extends JPanel
                     tiles[i][j].setNeighbour(Direction.EAST, tiles[i][j + 1]);
                 }
                 
-                if(i == 0 && tiles[i][j].getGameObject() == null)
+                if(i == 0 && tiles[i][j].getGameObject() instanceof Wall == false)
                 {
                     tiles[i][j].setNeighbour(Direction.NORTH, tiles[tiles.length - 1][j]);
                 }
-                if(i == tiles.length - 1 && tiles[i][j].getGameObject() == null)
+                if(i == tiles.length - 1 && tiles[i][j].getGameObject() instanceof Wall == false)
                 {
                     tiles[i][j].setNeighbour(Direction.SOUTH, tiles[0][j]);
                 }
-                if(j == 0 && tiles[i][j].getGameObject() == null)
+                if(j == 0 && tiles[i][j].getGameObject() instanceof Wall == false)
                 {
                     tiles[i][j].setNeighbour(Direction.WEST, tiles[i][tiles[0].length - 1]);
                 }
-                if(j == tiles[0].length - 1 && tiles[i][j].getGameObject() == null)
+                if(j == tiles[0].length - 1 && tiles[i][j].getGameObject() instanceof Wall == false)
                 {
                     tiles[i][j].setNeighbour(Direction.EAST, tiles[i][0]);
                 }
@@ -150,5 +158,6 @@ public class Playfield extends JPanel
 	    }
 	}
 	repaint();
+	this.requestFocus();
     }
 }

@@ -7,9 +7,7 @@
 package projectpacman;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
@@ -23,7 +21,7 @@ public class MainScreen extends JFrame
     private JPanel panel;
     private JPanel veldCont;
     private JButton close;
-    private JButton start;
+    private JButton restart;
     
     private Playfield veld;
     
@@ -38,7 +36,7 @@ public class MainScreen extends JFrame
     {	
 	panel = new JPanel();
 	veldCont = new JPanel();
-	start = new JButton("Starten");
+	restart = new JButton("Herstarten");
 	close = new JButton("Sluiten");
 	veld = new Playfield();
 	
@@ -49,11 +47,11 @@ public class MainScreen extends JFrame
 	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	this.setLocationRelativeTo(null);
 	
-	start.addActionListener(new ActionListener() {
+	restart.addActionListener(new ActionListener() {
 
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
-		startActionPerformed(e);
+		restartActionPerformed(e);
 	    }
 	});
 	
@@ -67,11 +65,11 @@ public class MainScreen extends JFrame
 	
 	panel.setPreferredSize(new Dimension(this.getWidth(), 30));
 	veldCont.setPreferredSize(new Dimension(this.getWidth()- 20, 550));
-	start.setPreferredSize(new Dimension(80, 20));
+	restart.setPreferredSize(new Dimension(110, 20));
 	close.setPreferredSize(new Dimension(80, 20));
 	veld.setPreferredSize(new Dimension(this.getWidth(), 550));
 	
-	panel.add(start);
+	panel.add(restart);
 	panel.add(close);
 	veldCont.add(veld);
 	
@@ -88,11 +86,9 @@ public class MainScreen extends JFrame
 	this.dispose();
     }
     
-    private void startActionPerformed(ActionEvent e)
+    private void restartActionPerformed(ActionEvent e)
     {	
-//	veld = new Playfield();
-//	veld.setPreferredSize(new Dimension(this.getWidth(), 550));
-//	veldCont.add(veld);
-//	veld.requestFocus();
+	veld.initLevel();
+	veld.repaint();
     }
 }
