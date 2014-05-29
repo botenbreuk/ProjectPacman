@@ -6,6 +6,8 @@
 
 package projectpacman;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.KeyListener;
 import javax.swing.JPanel;
@@ -14,10 +16,15 @@ import javax.swing.JPanel;
  *
  * @author Robin
  */
-public class Playfield extends JPanel
+public final class Playfield extends JPanel
 {
     private Tile[][] tiles;
     private int[][] layout;
+    private static int score = 0;
+    
+    public int getScore() { return Playfield.score; };
+    public static void setScore(int score){ Playfield.score += score; }
+    public static void resetScore() { Playfield.score = 0; }
     
     public Playfield()
     {
@@ -29,15 +36,15 @@ public class Playfield extends JPanel
     {
 	layout = new int[][]
 	{
-	    {1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1},
+	    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 	    {1, 4, 4, 4, 4, 4, 4, 4, 4, 1, 4, 4, 4, 4, 4, 4, 4, 4, 1},
 	    {1, 4, 1, 1, 4, 1, 1, 1, 4, 1, 4, 1, 1, 1, 4, 1, 1, 4, 1},
 	    {1, 4, 1, 1, 4, 1, 1, 1, 4, 1, 4, 1, 1, 1, 4, 1, 1, 4, 1},
 	    {1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 1},
 	    {1, 4, 1, 1, 4, 1, 4, 1, 1, 1, 1, 1, 4, 1, 4, 1, 1, 4, 1},
-	    {1, 4, 4, 4, 4, 1, 4, 4, 4, 1, 4, 4, 4, 1, 4, 4, 4, 4, 4},
+	    {1, 4, 4, 4, 4, 1, 4, 4, 4, 1, 4, 4, 4, 1, 4, 4, 4, 4, 1},
 	    {1, 1, 1, 1, 4, 1, 1, 1, 4, 1, 4, 1, 1, 1, 4, 1, 1, 1, 1},
-	    {0, 0, 0, 1, 4, 1, 4, 4, 4, 4, 4, 4, 4, 1, 4, 1, 0, 0, 0},
+	    {0, 0, 0, 1, 4, 1, 4, 4, 4, 9, 4, 4, 4, 1, 4, 1, 0, 0, 0},
 	    {1, 1, 1, 1, 4, 1, 4, 1, 1, 6, 1, 1, 4, 1, 4, 1, 1, 1, 1},
 	    {4, 4, 4, 4, 4, 4, 4, 1, 0, 0, 0, 1, 4, 4, 4, 4, 4, 4, 4},
 	    {1, 1, 1, 1, 4, 1, 4, 1, 1, 1, 1, 1, 4, 1, 4, 1, 1, 1, 1},
@@ -50,7 +57,7 @@ public class Playfield extends JPanel
 	    {1, 4, 4, 4, 4, 1, 4, 4, 4, 1, 4, 4, 4, 1, 4, 4, 4, 4, 1},
 	    {1, 4, 1, 1, 1, 1, 1, 1, 4, 1, 4, 1, 1, 1, 1, 1, 1, 4, 1},
 	    {1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 1},
-	    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1}
+	    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
 	};
     }
     
@@ -62,48 +69,44 @@ public class Playfield extends JPanel
 	{
 	    for (int j = 0; j < layout[0].length; j++) 
 	    {	
+		Tile tile = new Tile(j, i);
 		switch(layout[i][j])
 		{
 		    default:
 		    case 0:
-			Tile empty = new Tile(j, i);
-			empty.setGameObject(null);
-			tiles[i][j] = empty;
+			tile.setGameObject(null);
 			break;
 		    case 1:
-			Tile wallTile = new Tile(j, i);
                         Wall wall = new Wall();
-                        wall.setTile(wallTile);
-			wallTile.setGameObject(wall);
-			tiles[i][j] = wallTile;
+                        wall.setTile(tile);
+			tile.setGameObject(wall);
 			break;
 		    case 4:
-			Tile dotTile = new Tile(j, i);
 			Dot dot = new Dot();
-			dot.setTile(dotTile);
-			dotTile.setGameObject(dot);
-			tiles[i][j] = dotTile;
+			dot.setTile(tile);
+			tile.setGameObject(dot);
 			break;
 		    case 6:
-			Tile doorTile = new Tile(j, i);
 			GhostWall door = new GhostWall();
-			door.setTile(doorTile);
-			doorTile.setGameObject(door);
-			tiles[i][j] = doorTile;
+			door.setTile(tile);
+			tile.setGameObject(door);
 			break;
 		    case 8:
-			Tile pacTile = new Tile(j, i);
 			Pacman pacman = new Pacman();
-                        pacman.setTile(pacTile);
-			pacTile.setGameObject(pacman);
+                        pacman.setTile(tile);
+			tile.setGameObject(pacman);
 			this.addKeyListener((KeyListener) pacman);
-			tiles[i][j] = pacTile;
+			break;
+		    case 9:
+			Ghost ghost = new Ghost();
+                        ghost.setTile(tile);
+			tile.setGameObject(ghost);
 			break;
 		}
+		tiles[i][j] = tile;
 	    }
 	}
         setNeighbours();
-	
     }
     
     private void setNeighbours()
@@ -165,5 +168,8 @@ public class Playfield extends JPanel
 	}
 	repaint();
 	this.requestFocus();
+	g.setColor(Color.WHITE);
+	g.setFont(new Font("default", Font.BOLD, 16));
+	g.drawString("Score: " + Playfield.score, 10, 15);
     }
 }

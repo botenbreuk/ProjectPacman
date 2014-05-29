@@ -8,6 +8,7 @@ package projectpacman;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
@@ -22,6 +23,7 @@ public class MainScreen extends JFrame
     private JPanel veldCont;
     private JButton close;
     private JButton restart;
+    private JLabel scoreLabel;
     
     private Playfield veld;
     
@@ -29,8 +31,6 @@ public class MainScreen extends JFrame
     {
 	initComponents();
     }
-    
-    
     
     private void initComponents()// <editor-fold defaultstate="collapsed" desc="InitComponents">
     {	
@@ -84,11 +84,13 @@ public class MainScreen extends JFrame
     private void closeActionPerformed(ActionEvent e)
     {
 	this.dispose();
+	System.exit(1);
     }
     
     private void restartActionPerformed(ActionEvent e)
     {	
+	Playfield.resetScore();
 	veld.initLevel();
 	veld.repaint();
-    }
+    }    
 }
