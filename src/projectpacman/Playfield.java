@@ -6,11 +6,11 @@
 
 package projectpacman;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.event.KeyListener;
-import javax.swing.JPanel;
+import java.util.Timer;
+import java.util.TimerTask;
+import javax.swing.*;
 
 /**
  *
@@ -21,20 +21,27 @@ public final class Playfield extends JPanel
     private Tile[][] tiles;
     private int[][] layout;
     private static int score = 0;
+    private static String time;
+    private static Timer timer;
     
     public int getScore() { return Playfield.score; };
-    public static void setScore(int score){ Playfield.score += score; }
+    public String getTime() { return Playfield.time; } 
+    
+    public static void setTime(String time) { Playfield.time = time; }
+    
+    public static void addScore(int score){ Playfield.score += score; }
     public static void resetScore() { Playfield.score = 0; }
     
     public Playfield()
     {
 	this.setVisible(true);
 	initLevel();
+	startTime();
     }
     
-    private void setLayout()
+    private void setLayout(int levelselect)
     {
-	layout = new int[][]
+	int[][] level1 = new int[][]
 	{
 	    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 	    {1, 4, 4, 4, 4, 4, 4, 4, 4, 1, 4, 4, 4, 4, 4, 4, 4, 4, 1},
@@ -44,9 +51,9 @@ public final class Playfield extends JPanel
 	    {1, 4, 1, 1, 4, 1, 4, 1, 1, 1, 1, 1, 4, 1, 4, 1, 1, 4, 1},
 	    {1, 4, 4, 4, 4, 1, 4, 4, 4, 1, 4, 4, 4, 1, 4, 4, 4, 4, 1},
 	    {1, 1, 1, 1, 4, 1, 1, 1, 4, 1, 4, 1, 1, 1, 4, 1, 1, 1, 1},
-	    {0, 0, 0, 1, 4, 1, 4, 4, 4, 9, 4, 4, 4, 1, 4, 1, 0, 0, 0},
+	    {0, 0, 0, 1, 4, 1, 4, 4, 4, 4, 4, 4, 4, 1, 4, 1, 0, 0, 0},
 	    {1, 1, 1, 1, 4, 1, 4, 1, 1, 6, 1, 1, 4, 1, 4, 1, 1, 1, 1},
-	    {4, 4, 4, 4, 4, 4, 4, 1, 0, 0, 0, 1, 4, 4, 4, 4, 4, 4, 4},
+	    {4, 4, 4, 4, 4, 4, 4, 1, 9, 0, 0, 1, 4, 4, 4, 4, 4, 4, 4},
 	    {1, 1, 1, 1, 4, 1, 4, 1, 1, 1, 1, 1, 4, 1, 4, 1, 1, 1, 1},
 	    {0, 0, 0, 1, 4, 1, 4, 4, 4, 4, 4, 4, 4, 1, 4, 1, 0, 0, 0},
 	    {1, 1, 1, 1, 4, 1, 4, 1, 1, 1, 1, 1, 4, 1, 4, 1, 1, 1, 1},
@@ -59,11 +66,46 @@ public final class Playfield extends JPanel
 	    {1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 1},
 	    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
 	};
+	
+	int[][] level2 = new int[][]
+	{
+	    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+	    {1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 1},
+	    {1, 4, 1, 1, 4, 1, 4, 1, 1, 1, 1, 1, 4, 1, 4, 1, 1, 4, 1},
+	    {1, 4, 1, 1, 4, 1, 4, 1, 0, 0, 0, 1, 4, 1, 4, 1, 1, 4, 1},
+	    {1, 4, 4, 4, 4, 4, 4, 1, 1, 6, 1, 1, 4, 4, 4, 4, 4, 4, 1},
+	    {1, 1, 1, 1, 4, 1, 4, 4, 4, 9, 4, 4, 4, 1, 4, 1, 1, 1, 1},
+	    {4, 4, 4, 4, 4, 1, 4, 4, 4, 1, 4, 4, 4, 1, 4, 4, 4, 4, 4},
+	    {1, 1, 1, 1, 4, 1, 1, 1, 4, 1, 4, 1, 1, 1, 4, 1, 1, 1, 1},
+	    {1, 4, 4, 4, 4, 1, 4, 4, 4, 4, 4, 4, 4, 1, 4, 4, 4, 4, 1},
+	    {1, 4, 1, 1, 4, 1, 4, 1, 1, 4, 1, 1, 4, 1, 4, 1, 1, 4, 1},
+	    {1, 4, 4, 4, 4, 4, 4, 1, 1, 4, 1, 1, 4, 4, 4, 4, 4, 4, 1},
+	    {1, 1, 1, 1, 4, 1, 4, 1, 1, 4, 1, 1, 4, 1, 4, 1, 1, 1, 1},
+	    {0, 0, 0, 1, 4, 1, 4, 4, 4, 4, 4, 4, 4, 1, 4, 1, 0, 0, 0},
+	    {1, 1, 1, 1, 4, 1, 4, 1, 1, 1, 1, 1, 4, 1, 4, 1, 1, 1, 1},
+	    {1, 4, 4, 4, 4, 4, 4, 4, 4, 1, 4, 4, 4, 4, 4, 4, 4, 4, 1},
+	    {1, 4, 1, 1, 4, 1, 1, 1, 4, 1, 4, 1, 1, 1, 4, 1, 1, 4, 1},
+	    {1, 4, 4, 1, 4, 4, 4, 4, 4, 8, 4, 4, 4, 4, 4, 1, 4, 4, 1},
+	    {1, 4, 4, 4, 4, 1, 4, 4, 1, 1, 1, 4, 4, 1, 4, 4, 4, 4, 1},
+	    {1, 4, 1, 4, 4, 1, 1, 4, 4, 1, 4, 4, 1, 1, 4, 4, 1, 4, 1},
+	    {1, 4, 1, 1, 4, 4, 1, 1, 4, 1, 4, 1, 1, 4, 4, 1, 1, 4, 1},
+	    {1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 1},
+	    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+	};
+	
+	if(levelselect == 1)
+	{
+	    layout = level1;
+	}
+	if(levelselect == 2)
+	{
+	    layout = level2;
+	}
     }
     
     public void initLevel()
-    {	
-	setLayout();
+    {
+	setLayout(2);
 	tiles = new Tile[layout.length][layout[0].length];
 	for (int i = 0; i < layout.length; i++) 
 	{
@@ -107,6 +149,7 @@ public final class Playfield extends JPanel
 	    }
 	}
         setNeighbours();
+	startTime();
     }
     
     private void setNeighbours()
@@ -152,9 +195,43 @@ public final class Playfield extends JPanel
         }
     }
     
+    private void startTime()
+    {
+	Playfield.time = "00:00";
+	if(timer != null)
+	{
+	    timer.cancel();
+	    timer = null;
+	    startTime();
+	}
+	else
+	{
+	    timer = new Timer();
+	    timer.schedule(new TimerTask() 
+	    {
+		private int minutes = 0;
+		private int seconds = 0;
+		@Override
+		public void run() {
+
+		    if(seconds < 59)
+		    {
+			seconds += 1;
+		    }
+		    else
+		    {
+			seconds = 1;
+			minutes += 1;
+		    }
+		    setTime(String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
+		}
+	    }, 0, 1000);
+	}
+    }
+    
     @Override
     public void paint(Graphics g) 
-    {	
+    {
 	for (int i = 0; i < tiles.length; i++) 
 	{
 	    for (int j = 0; j < tiles[0].length; j++) 
@@ -167,9 +244,9 @@ public final class Playfield extends JPanel
 	    }
 	}
 	repaint();
-	this.requestFocus();
 	g.setColor(Color.WHITE);
 	g.setFont(new Font("default", Font.BOLD, 16));
 	g.drawString("Score: " + Playfield.score, 10, 15);
+	g.drawString("Time: " + getTime(), this.getWidth() - 100, 15);
     }
 }

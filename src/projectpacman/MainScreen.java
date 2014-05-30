@@ -8,7 +8,6 @@ package projectpacman;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
@@ -23,7 +22,6 @@ public class MainScreen extends JFrame
     private JPanel veldCont;
     private JButton close;
     private JButton restart;
-    private JLabel scoreLabel;
     
     private Playfield veld;
     
@@ -40,7 +38,7 @@ public class MainScreen extends JFrame
 	close = new JButton("Sluiten");
 	veld = new Playfield();
 	
-	this.setSize(475, 620);
+	this.setSize(480, 620);
 	this.setTitle("Pacman game");
 	this.setResizable(false);
 	this.setVisible(true);
@@ -64,7 +62,7 @@ public class MainScreen extends JFrame
 	});
 	
 	panel.setPreferredSize(new Dimension(this.getWidth(), 30));
-	veldCont.setPreferredSize(new Dimension(this.getWidth()- 20, 550));
+	veldCont.setPreferredSize(new Dimension(this.getWidth()- 20, 560));
 	restart.setPreferredSize(new Dimension(110, 20));
 	close.setPreferredSize(new Dimension(80, 20));
 	veld.setPreferredSize(new Dimension(this.getWidth(), 550));
@@ -88,8 +86,7 @@ public class MainScreen extends JFrame
     }
     
     private void restartActionPerformed(ActionEvent e)
-    {	
-	Playfield.resetScore();
+    {
 	veld.initLevel();
 	veld.repaint();
     }    
