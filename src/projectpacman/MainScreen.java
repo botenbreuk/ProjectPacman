@@ -45,21 +45,8 @@ public class MainScreen extends JFrame
 	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	this.setLocationRelativeTo(null);
 	
-	restart.addActionListener(new ActionListener() {
-
-	    @Override
-	    public void actionPerformed(ActionEvent e) {
-		restartActionPerformed(e);
-	    }
-	});
-	
-	close.addActionListener(new ActionListener() {
-
-	    @Override
-	    public void actionPerformed(ActionEvent e) {
-		closeActionPerformed(e);
-	    }
-	});
+	restart.addActionListener(this::restartActionPerformed);
+	close.addActionListener(this::closeActionPerformed);
 	
 	panel.setPreferredSize(new Dimension(this.getWidth(), 30));
 	veldCont.setPreferredSize(new Dimension(this.getWidth()- 20, 560));

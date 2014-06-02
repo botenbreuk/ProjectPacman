@@ -10,6 +10,8 @@ import java.awt.*;
 import java.awt.event.KeyListener;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 
 /**
@@ -20,6 +22,8 @@ public final class Playfield extends JPanel
 {
     private Tile[][] tiles;
     private int[][] layout;
+    private int level = 1;
+    private int totalScore = 0;
     private static int score = 0;
     private static String time;
     private static Timer timer;
@@ -39,7 +43,7 @@ public final class Playfield extends JPanel
 	startTime();
     }
     
-    private void setLayout(int levelselect)
+    private void setLayout()
     {
 	int[][] level1 = new int[][]
 	{
@@ -53,7 +57,7 @@ public final class Playfield extends JPanel
 	    {1, 1, 1, 1, 4, 1, 1, 1, 4, 1, 4, 1, 1, 1, 4, 1, 1, 1, 1},
 	    {0, 0, 0, 1, 4, 1, 4, 4, 4, 4, 4, 4, 4, 1, 4, 1, 0, 0, 0},
 	    {1, 1, 1, 1, 4, 1, 4, 1, 1, 6, 1, 1, 4, 1, 4, 1, 1, 1, 1},
-	    {4, 4, 4, 4, 4, 4, 4, 1, 9, 0, 0, 1, 4, 4, 4, 4, 4, 4, 4},
+	    {4, 4, 4, 4, 4, 4, 4, 1, 0, 0, 0, 1, 4, 4, 4, 4, 4, 4, 4},
 	    {1, 1, 1, 1, 4, 1, 4, 1, 1, 1, 1, 1, 4, 1, 4, 1, 1, 1, 1},
 	    {0, 0, 0, 1, 4, 1, 4, 4, 4, 4, 4, 4, 4, 1, 4, 1, 0, 0, 0},
 	    {1, 1, 1, 1, 4, 1, 4, 1, 1, 1, 1, 1, 4, 1, 4, 1, 1, 1, 1},
@@ -74,7 +78,7 @@ public final class Playfield extends JPanel
 	    {1, 4, 1, 1, 4, 1, 4, 1, 1, 1, 1, 1, 4, 1, 4, 1, 1, 4, 1},
 	    {1, 4, 1, 1, 4, 1, 4, 1, 0, 0, 0, 1, 4, 1, 4, 1, 1, 4, 1},
 	    {1, 4, 4, 4, 4, 4, 4, 1, 1, 6, 1, 1, 4, 4, 4, 4, 4, 4, 1},
-	    {1, 1, 1, 1, 4, 1, 4, 4, 4, 9, 4, 4, 4, 1, 4, 1, 1, 1, 1},
+	    {1, 1, 1, 1, 4, 1, 4, 4, 4, 0, 4, 4, 4, 1, 4, 1, 1, 1, 1},
 	    {4, 4, 4, 4, 4, 1, 4, 4, 4, 1, 4, 4, 4, 1, 4, 4, 4, 4, 4},
 	    {1, 1, 1, 1, 4, 1, 1, 1, 4, 1, 4, 1, 1, 1, 4, 1, 1, 1, 1},
 	    {1, 4, 4, 4, 4, 1, 4, 4, 4, 4, 4, 4, 4, 1, 4, 4, 4, 4, 1},
@@ -93,11 +97,11 @@ public final class Playfield extends JPanel
 	    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
 	};
 	
-	if(levelselect == 1)
+	if(level == 1)
 	{
 	    layout = level1;
 	}
-	if(levelselect == 2)
+	else if(level == 2)
 	{
 	    layout = level2;
 	}
@@ -105,7 +109,7 @@ public final class Playfield extends JPanel
     
     public void initLevel()
     {
-	setLayout(2);
+	setLayout();
 	tiles = new Tile[layout.length][layout[0].length];
 	for (int i = 0; i < layout.length; i++) 
 	{
@@ -127,6 +131,7 @@ public final class Playfield extends JPanel
 			Dot dot = new Dot();
 			dot.setTile(tile);
 			tile.setGameObject(dot);
+			totalScore += 10;
 			break;
 		    case 6:
 			GhostWall door = new GhostWall();
@@ -149,7 +154,6 @@ public final class Playfield extends JPanel
 	    }
 	}
         setNeighbours();
-	startTime();
     }
     
     private void setNeighbours()
@@ -248,5 +252,11 @@ public final class Playfield extends JPanel
 	g.setFont(new Font("default", Font.BOLD, 16));
 	g.drawString("Score: " + Playfield.score, 10, 15);
 	g.drawString("Time: " + getTime(), this.getWidth() - 100, 15);
+	
+	if(score == totalScore)
+	{
+	    level++;
+	    initLevel();
+	}
     }
 }
