@@ -9,7 +9,6 @@ package projectpacman;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.*;
 
 /**
@@ -74,7 +73,6 @@ public class MainScreen extends JFrame
     
     private void restartActionPerformed(ActionEvent e)
     {
-	veld.initLevel();
-	veld.repaint();
-    }    
+	
+    }
 }

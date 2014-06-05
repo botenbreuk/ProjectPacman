@@ -10,8 +10,6 @@ import java.awt.*;
 import java.awt.event.KeyListener;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 
 /**
@@ -97,6 +95,32 @@ public final class Playfield extends JPanel
 	    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
 	};
 	
+	int[][] level3 = new int[][]
+	{
+	    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+	    {1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 1},
+	    {1, 4, 1, 1, 4, 1, 4, 1, 1, 1, 1, 1, 4, 1, 4, 1, 1, 4, 1},
+	    {1, 4, 1, 1, 4, 1, 4, 1, 0, 0, 0, 1, 4, 1, 4, 1, 1, 4, 1},
+	    {1, 4, 4, 4, 4, 4, 4, 1, 1, 6, 1, 1, 4, 4, 4, 4, 4, 4, 1},
+	    {1, 1, 1, 1, 4, 1, 4, 4, 4, 0, 4, 4, 4, 1, 4, 1, 1, 1, 1},
+	    {4, 4, 4, 4, 4, 1, 4, 4, 4, 1, 4, 4, 4, 1, 4, 4, 4, 4, 4},
+	    {1, 1, 1, 1, 4, 1, 1, 1, 4, 1, 4, 1, 1, 1, 4, 1, 1, 1, 1},
+	    {1, 4, 4, 4, 4, 1, 4, 4, 4, 4, 4, 4, 4, 1, 4, 4, 4, 4, 1},
+	    {1, 4, 1, 1, 4, 1, 4, 1, 1, 4, 1, 1, 4, 1, 4, 1, 1, 4, 1},
+	    {1, 4, 4, 4, 4, 4, 4, 1, 1, 4, 1, 1, 4, 4, 4, 4, 4, 4, 1},
+	    {1, 1, 1, 1, 4, 1, 4, 1, 1, 4, 1, 1, 4, 1, 4, 1, 1, 1, 1},
+	    {0, 0, 0, 1, 4, 1, 4, 4, 4, 4, 4, 4, 4, 1, 4, 1, 0, 0, 0},
+	    {1, 1, 1, 1, 4, 1, 4, 1, 1, 1, 1, 1, 4, 1, 4, 1, 1, 1, 1},
+	    {1, 4, 4, 4, 4, 4, 4, 4, 4, 1, 4, 4, 4, 4, 4, 4, 4, 4, 1},
+	    {1, 4, 1, 1, 4, 1, 1, 1, 4, 1, 4, 1, 1, 1, 4, 1, 1, 4, 1},
+	    {1, 4, 4, 1, 4, 4, 1, 4, 4, 8, 4, 4, 1, 4, 4, 1, 4, 4, 1},
+	    {1, 4, 4, 4, 1, 4, 4, 4, 1, 1, 1, 4, 4, 4, 1, 4, 4, 4, 1},
+	    {1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 1},
+	    {1, 4, 1, 1, 4, 4, 1, 1, 1, 1, 1, 1, 1, 4, 4, 1, 1, 4, 1},
+	    {1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 1},
+	    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+	};
+	
 	if(level == 1)
 	{
 	    layout = level1;
@@ -104,6 +128,10 @@ public final class Playfield extends JPanel
 	else if(level == 2)
 	{
 	    layout = level2;
+	}
+	else if(level == 3)
+	{
+	    layout = level3;
 	}
     }
     
@@ -179,6 +207,7 @@ public final class Playfield extends JPanel
                     tiles[i][j].setNeighbour(Direction.EAST, tiles[i][j + 1]);
                 }
                 
+		// if statements om door de randen van de level te gaan
                 if(i == 0 && tiles[i][j].getGameObject() instanceof Wall == false)
                 {
                     tiles[i][j].setNeighbour(Direction.NORTH, tiles[tiles.length - 1][j]);
