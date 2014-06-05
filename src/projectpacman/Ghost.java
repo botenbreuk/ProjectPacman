@@ -24,7 +24,7 @@ public class Ghost extends GameObject
 	timer.schedule(new TimerTask() {
 
             private final Random random = new Random();
-            private final Direction curDir = Direction.WEST;
+            private Direction curDir = Direction.SOUTH;
 	    @Override
 	    public void run() {
 		
@@ -32,20 +32,25 @@ public class Ghost extends GameObject
 		
                 if(randomDirection == 0 && curDir != Direction.NORTH)
                 {
+		    curDir = Direction.NORTH;
                     move(Direction.NORTH);
                 }
                 if(randomDirection == 1 && curDir != Direction.EAST)
                 {
+		    curDir = Direction.EAST;
                     move(Direction.EAST);
                 }
                 if(randomDirection == 2 && curDir != Direction.SOUTH)
                 {
+		    curDir = Direction.SOUTH;
                     move(Direction.SOUTH);
                 }
                 if(randomDirection == 3 && curDir != Direction.WEST)
                 {
+		    curDir = Direction.WEST;
                     move(Direction.WEST);
                 }
+		System.out.println(randomDirection);
 	    }
 	    
 	} , 0, 1000);

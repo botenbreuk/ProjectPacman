@@ -65,7 +65,6 @@ public class Pacman extends GameObject implements KeyListener
 	    if(object instanceof Dot) 
 	    {
 		Dot dot = (Dot) object;
-		Playfield.addScore(dot.getScore());
 		tile.removeObject();
 	    }
 	    tile.addGameObject(this);

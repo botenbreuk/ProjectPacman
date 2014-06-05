@@ -22,10 +22,10 @@ public class Dot extends GameObject
     @Override
     public void draw(Graphics g) {
 	Tile tile = super.getTile();
-	int x = (int) ((tile.getWidth() * tile.getXPos()) + tile.getWidth() / 2);
-	int y = (int) ((tile.getHeight() * tile.getYPos()) + tile.getHeight() / 2);
+	int x = (int) ((tile.getWidth() * tile.getXPos()) + (tile.getWidth() - (tile.getWidth() / 4)) / 2);
+	int y = (int) ((tile.getHeight() * tile.getYPos()) + (tile.getHeight() - (tile.getHeight() / 4)) / 2);
 	
-	g.setColor(Color.PINK);
+	g.setColor(Color.WHITE);
 	g.drawOval(x, y, tile.getWidth() / 4, tile.getHeight() / 4);
     }
     

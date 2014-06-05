@@ -21,18 +21,18 @@ public final class Playfield extends JPanel
     private Tile[][] tiles;
     private int[][] layout;
     private int level = 1;
-    private int totalScore = 0;
-    private static int score = 0;
-    private static String time;
-    private static Timer timer;
+    private int maxScore = 0;
+    private int score = 0;
+    private String time;
+    private Timer timer;
     
-    public int getScore() { return Playfield.score; };
-    public String getTime() { return Playfield.time; } 
+    public int getScore() { return this.score; };
+    public String getTime() { return this.time; } 
     
-    public static void setTime(String time) { Playfield.time = time; }
+    public void setTime(String time) { this.time = time; }
     
-    public static void addScore(int score){ Playfield.score += score; }
-    public static void resetScore() { Playfield.score = 0; }
+    public void addScore(int score){ this.score += score; }
+    public void resetScore() { this.score = 0; }
     
     public Playfield()
     {
@@ -41,13 +41,13 @@ public final class Playfield extends JPanel
 	startTime();
     }
     
-    private void setLayout()
+    private void setLevel()
     {
 	int[][] level1 = new int[][]
 	{
 	    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
 	    {1, 4, 4, 4, 4, 4, 4, 4, 4, 1, 4, 4, 4, 4, 4, 4, 4, 4, 1},
-	    {1, 4, 1, 1, 4, 1, 1, 1, 4, 1, 4, 1, 1, 1, 4, 1, 1, 4, 1},
+	    {1, 5, 1, 1, 4, 1, 1, 1, 4, 1, 4, 1, 1, 1, 4, 1, 1, 5, 1},
 	    {1, 4, 1, 1, 4, 1, 1, 1, 4, 1, 4, 1, 1, 1, 4, 1, 1, 4, 1},
 	    {1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 1},
 	    {1, 4, 1, 1, 4, 1, 4, 1, 1, 1, 1, 1, 4, 1, 4, 1, 1, 4, 1},
@@ -64,7 +64,7 @@ public final class Playfield extends JPanel
 	    {1, 4, 4, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 1, 4, 4, 1},
 	    {1, 1, 4, 1, 4, 1, 4, 1, 1, 1, 1, 1, 4, 1, 4, 1, 4, 1, 1},
 	    {1, 4, 4, 4, 4, 1, 4, 4, 4, 1, 4, 4, 4, 1, 4, 4, 4, 4, 1},
-	    {1, 4, 1, 1, 1, 1, 1, 1, 4, 1, 4, 1, 1, 1, 1, 1, 1, 4, 1},
+	    {1, 5, 1, 1, 1, 1, 1, 1, 4, 1, 4, 1, 1, 1, 1, 1, 1, 5, 1},
 	    {1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 1},
 	    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
 	};
@@ -137,7 +137,7 @@ public final class Playfield extends JPanel
     
     public void initLevel()
     {
-	setLayout();
+	setLevel();
 	tiles = new Tile[layout.length][layout[0].length];
 	for (int i = 0; i < layout.length; i++) 
 	{
@@ -164,7 +164,7 @@ public final class Playfield extends JPanel
 			Dot dot = new Dot();
 			dot.setTile(tile);
 			tile.addGameObject(dot);
-			totalScore += 10;
+			maxScore += 10;
 			break;
 		    case 5:
 			SuperDot superDot = new SuperDot();
@@ -235,7 +235,7 @@ public final class Playfield extends JPanel
     
     private void startTime()
     {
-	Playfield.time = "00:00";
+	this.time = "00:00";
 	if(timer != null)
 	{
 	    timer.cancel();
@@ -266,10 +266,10 @@ public final class Playfield extends JPanel
 	    }, 0, 1000);
 	}
     }
-    
+
     @Override
-    public void paint(Graphics g) 
-    {
+    protected void paintComponent(Graphics g) 
+    {	
 	for (int i = 0; i < tiles.length; i++) 
 	{
 	    for (int j = 0; j < tiles[0].length; j++) 
@@ -281,16 +281,24 @@ public final class Playfield extends JPanel
 		if(gmob != null) gmob.draw(g);
 	    }
 	}
-	repaint();
+	
 	g.setColor(Color.WHITE);
 	g.setFont(new Font("default", Font.BOLD, 16));
-	g.drawString("Score: " + Playfield.score, 10, 15);
+	g.drawString("Score: " + this.score, 10, 15);
 	g.drawString("Time: " + getTime(), this.getWidth() - 100, 15);
 	
-	if(score >= totalScore)
+	if(score >= maxScore)
 	{
 	    level++;
 	    initLevel();
 	}
+    }
+    
+    
+    
+    @Override
+    public void paint(Graphics g) 
+    {
+	
     }
 }
