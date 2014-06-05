@@ -15,7 +15,10 @@ import java.awt.Graphics;
  */
 public class Dot extends GameObject
 {
-
+    private static final int score = 10;
+    
+    public int getScore() { return Dot.score; }
+    
     @Override
     public void draw(Graphics g) {
 	Tile tile = super.getTile();

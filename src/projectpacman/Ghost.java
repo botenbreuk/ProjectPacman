@@ -60,7 +60,8 @@ public class Ghost extends GameObject
                tile.getGameObject() instanceof GhostWall == true ||
                tile.getGameObject() instanceof Ghost == true)
             {
-                tile.setGameObject(this);
+		super.getTile().removeObject();
+                tile.addGameObject(this);
                 super.setTile(tile);
             }
         }

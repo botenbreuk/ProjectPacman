@@ -24,6 +24,6 @@ public class Wall extends GameObject
 	int y = tile.getHeight() * tile.getYPos();
 	
 	g.setColor(new Color(67, 95, 222));
-	g.fillRect(x, y, tile.getWidth(), tile.getHeight());
+	g.drawRect(x, y, tile.getWidth() - 1, tile.getHeight() - 1);
     }
 }

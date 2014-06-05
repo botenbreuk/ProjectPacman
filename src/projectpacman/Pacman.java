@@ -59,11 +59,16 @@ public class Pacman extends GameObject implements KeyListener
     {
 	Tile tile = super.getTile().getNeigbour(d);
 	GameObject object = tile.getGameObject();
+	System.out.println(object);
 	if(object instanceof Wall == false)
 	{
-	    if(object instanceof Dot) Playfield.addScore(10);
-	    super.getTile().setGameObject(null);
-	    tile.setGameObject(this);
+	    if(object instanceof Dot) 
+	    {
+		Dot dot = (Dot) object;
+		Playfield.addScore(dot.getScore());
+		tile.removeObject();
+	    }
+	    tile.addGameObject(this);
 	    super.setTile(tile);
 	}
     }
