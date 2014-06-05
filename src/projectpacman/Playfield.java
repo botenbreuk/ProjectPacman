@@ -281,7 +281,7 @@ public final class Playfield extends JPanel
 		if(gmob != null) gmob.draw(g);
 	    }
 	}
-	
+//	repaint();
 	g.setColor(Color.WHITE);
 	g.setFont(new Font("default", Font.BOLD, 16));
 	g.drawString("Score: " + this.score, 10, 15);
@@ -296,9 +296,9 @@ public final class Playfield extends JPanel
     
     
     
-    @Override
-    public void paint(Graphics g) 
-    {
-	
-    }
+//    @Override
+//    public void paint(Graphics g) 
+//    {
+//	
+//    }
 }
