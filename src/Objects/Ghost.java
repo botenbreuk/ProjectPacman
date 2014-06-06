@@ -4,22 +4,26 @@
  * and open the template in the editor.
  */
 
-package projectpacman;
+package Objects;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import projectpacman.Direction;
+import projectpacman.GamePanel;
+import projectpacman.Tile;
 
 /**
  *
  * @author Robin
  */
-public class Ghost extends GameObject
+public class Ghost extends MovingObject
 {
-    public Ghost()
+    public Ghost(GamePanel playfield)
     {
+        super.gamePanel = playfield;
 	Timer timer = new Timer();
 	timer.schedule(new TimerTask() {
 
@@ -56,7 +60,8 @@ public class Ghost extends GameObject
 	} , 0, 1000);
     }
     
-    public void move(Direction d)
+    @Override
+    protected void move(Direction d)
     {
 	Tile tile = super.getTile().getNeigbour(d);
         if(tile != null)
@@ -65,9 +70,10 @@ public class Ghost extends GameObject
                tile.getGameObject() instanceof GhostWall == true ||
                tile.getGameObject() instanceof Ghost == true)
             {
-		super.getTile().removeObject();
+		super.getTile().removeGameObject();
                 tile.addGameObject(this);
                 super.setTile(tile);
+                super.gamePanel.paintComponent();
             }
         }
     }
@@ -82,5 +88,4 @@ public class Ghost extends GameObject
 	g.setColor(Color.RED);
 	g.fillOval(x, y, tile.getWidth(), tile.getHeight());
     }
-    
 }

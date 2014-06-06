@@ -22,7 +22,7 @@ public class MainScreen extends JFrame
     private JButton close;
     private JButton restart;
     
-    private Playfield veld;
+    private Playfield playfield;
     
     public MainScreen()
     {
@@ -35,8 +35,8 @@ public class MainScreen extends JFrame
 	veldCont = new JPanel();
 	restart = new JButton("Herstarten");
 	close = new JButton("Sluiten");
-	veld = new Playfield();
-	
+	playfield = new Playfield();
+        
 	this.setSize(480, 620);
 	this.setTitle("Pacman game");
 	this.setResizable(false);
@@ -51,28 +51,31 @@ public class MainScreen extends JFrame
 	veldCont.setPreferredSize(new Dimension(this.getWidth()- 20, 560));
 	restart.setPreferredSize(new Dimension(110, 20));
 	close.setPreferredSize(new Dimension(80, 20));
-	veld.setPreferredSize(new Dimension(this.getWidth(), 550));
+	playfield.setPreferredSize(new Dimension(this.getWidth(), 550));
 	
 	panel.add(restart);
 	panel.add(close);
-	veldCont.add(veld);
+	veldCont.add(playfield);
 	
 	this.add(veldCont, BorderLayout.CENTER);
 	this.add(panel, BorderLayout.SOUTH);
 	
-	veld.requestFocus();
+	playfield.requestFocus();
 	
 	pack();
     }//</editor-fold>
     
     private void closeActionPerformed(ActionEvent e)
     {
-	this.dispose();
 	System.exit(1);
     }
     
     private void restartActionPerformed(ActionEvent e)
     {
-	
+        
+    }
+    
+    public Playfield getPlayfield(){
+        return playfield;
     }
 }

@@ -6,6 +6,13 @@
 
 package projectpacman;
 
+import Objects.GameObject;
+import Objects.GhostWall;
+import Objects.Pacman;
+import Objects.Dot;
+import Objects.SuperDot;
+import Objects.Wall;
+import Objects.Ghost;
 import java.awt.*;
 import java.awt.event.KeyListener;
 import java.util.Timer;
@@ -16,11 +23,11 @@ import javax.swing.*;
  *
  * @author Robin
  */
-public final class Playfield extends JPanel
+public final class Playfield extends JPanel implements GamePanel
 {
-    private Tile[][] tiles;
-    private int[][] layout;
-    private int level = 1;
+    private int levelNumber;
+    private Tile[][] level;
+    private int[][] template;
     private int maxScore = 0;
     private int score = 0;
     private String time;
@@ -31,11 +38,13 @@ public final class Playfield extends JPanel
     
     public void setTime(String time) { this.time = time; }
     
+    @Override
     public void addScore(int score){ this.score += score; }
-    public void resetScore() { this.score = 0; }
+    //public void resetScore() { this.score = 0; }
     
     public Playfield()
     {
+        this.levelNumber = 1;
 	this.setVisible(true);
 	initLevel();
 	startTime();
@@ -53,11 +62,11 @@ public final class Playfield extends JPanel
 	    {1, 4, 1, 1, 4, 1, 4, 1, 1, 1, 1, 1, 4, 1, 4, 1, 1, 4, 1},
 	    {1, 4, 4, 4, 4, 1, 4, 4, 4, 1, 4, 4, 4, 1, 4, 4, 4, 4, 1},
 	    {1, 1, 1, 1, 4, 1, 1, 1, 4, 1, 4, 1, 1, 1, 4, 1, 1, 1, 1},
-	    {0, 0, 0, 1, 4, 1, 4, 4, 8, 9, 4, 4, 4, 1, 4, 1, 0, 0, 0},
+	    {0, 0, 0, 1, 4, 1, 4, 4, 4, 9, 4, 4, 4, 1, 4, 1, 0, 0, 0},
 	    {1, 1, 1, 1, 4, 1, 4, 1, 1, 2, 1, 1, 4, 1, 4, 1, 1, 1, 1},
 	    {4, 4, 4, 4, 4, 4, 4, 1, 0, 0, 0, 1, 4, 4, 4, 4, 4, 4, 4},
 	    {1, 1, 1, 1, 4, 1, 4, 1, 1, 1, 1, 1, 4, 1, 4, 1, 1, 1, 1},
-	    {0, 0, 0, 1, 4, 1, 4, 4, 4, 4, 4, 4, 4, 1, 4, 1, 0, 0, 0},
+	    {0, 0, 0, 1, 4, 1, 4, 4, 4, 8, 4, 4, 4, 1, 4, 1, 0, 0, 0},
 	    {1, 1, 1, 1, 4, 1, 4, 1, 1, 1, 1, 1, 4, 1, 4, 1, 1, 1, 1},
 	    {1, 4, 4, 4, 4, 4, 4, 4, 4, 1, 4, 4, 4, 4, 4, 4, 4, 4, 1},
 	    {1, 4, 1, 1, 4, 1, 1, 1, 4, 1, 4, 1, 1, 1, 4, 1, 1, 4, 1},
@@ -121,30 +130,30 @@ public final class Playfield extends JPanel
 	    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
 	};
 	
-	if(level == 1)
+	if(levelNumber == 1)
 	{
-	    layout = level1;
+	    template = level1;
 	}
-	else if(level == 2)
+	else if(levelNumber == 2)
 	{
-	    layout = level2;
+	    template = level2;
 	}
-	else if(level == 3)
+	else if(levelNumber == 3)
 	{
-	    layout = level3;
+	    template = level3;
 	}
     }
     
     public void initLevel()
     {
 	setLevel();
-	tiles = new Tile[layout.length][layout[0].length];
-	for (int i = 0; i < layout.length; i++) 
+	level = new Tile[template.length][template[0].length];
+	for (int i = 0; i < template.length; i++) 
 	{
-	    for (int j = 0; j < layout[0].length; j++) 
+	    for (int j = 0; j < template[0].length; j++) 
 	    {	
 		Tile tile = new Tile(j, i);
-		switch(layout[i][j])
+		switch(template[i][j])
 		{
 		    default:
 		    case 0:
@@ -172,18 +181,18 @@ public final class Playfield extends JPanel
 			tile.addGameObject(superDot);
 			break;
 		    case 8:
-			Pacman pacman = new Pacman();
+			Pacman pacman = new Pacman(this);
                         pacman.setTile(tile);
 			tile.addGameObject(pacman);
 			this.addKeyListener((KeyListener) pacman);
 			break;
 		    case 9:
-			Ghost ghost = new Ghost();
+			Ghost ghost = new Ghost(this);
                         ghost.setTile(tile);
 			tile.addGameObject(ghost);
 			break;
 		}
-		tiles[i][j] = tile;
+		level[i][j] = tile;
 	    }
 	}
         setNeighbours();
@@ -191,43 +200,43 @@ public final class Playfield extends JPanel
     
     private void setNeighbours()
     {
-        for (int i = 0; i < tiles.length; i++) 
+        for (int i = 0; i < level.length; i++) 
         {
-            for (int j = 0; j < tiles[0].length; j++) 
+            for (int j = 0; j < level[0].length; j++) 
             {
                 if(i > 0)
                 {
-                    tiles[i][j].setNeighbour(Direction.NORTH, tiles[i - 1][j]);
+                    level[i][j].setNeighbour(Direction.NORTH, level[i - 1][j]);
                 }
-                if(i < tiles.length - 1)
+                if(i < level.length - 1)
                 {
-                    tiles[i][j].setNeighbour(Direction.SOUTH, tiles[i + 1][j]);
+                    level[i][j].setNeighbour(Direction.SOUTH, level[i + 1][j]);
                 }
                 if(j > 0)
                 {
-                    tiles[i][j].setNeighbour(Direction.WEST, tiles[i][j - 1]);
+                    level[i][j].setNeighbour(Direction.WEST, level[i][j - 1]);
                 }
-                if(j < tiles[0].length - 1)
+                if(j < level[0].length - 1)
                 {
-                    tiles[i][j].setNeighbour(Direction.EAST, tiles[i][j + 1]);
+                    level[i][j].setNeighbour(Direction.EAST, level[i][j + 1]);
                 }
                 
 		// if statements om door de randen van de level te gaan
-                if(i == 0 && tiles[i][j].getGameObject() instanceof Wall == false)
+                if(i == 0 && level[i][j].getGameObject() instanceof Wall == false)
                 {
-                    tiles[i][j].setNeighbour(Direction.NORTH, tiles[tiles.length - 1][j]);
+                    level[i][j].setNeighbour(Direction.NORTH, level[level.length - 1][j]);
                 }
-                if(i == tiles.length - 1 && tiles[i][j].getGameObject() instanceof Wall == false)
+                if(i == level.length - 1 && level[i][j].getGameObject() instanceof Wall == false)
                 {
-                    tiles[i][j].setNeighbour(Direction.SOUTH, tiles[0][j]);
+                    level[i][j].setNeighbour(Direction.SOUTH, level[0][j]);
                 }
-                if(j == 0 && tiles[i][j].getGameObject() instanceof Wall == false)
+                if(j == 0 && level[i][j].getGameObject() instanceof Wall == false)
                 {
-                    tiles[i][j].setNeighbour(Direction.WEST, tiles[i][tiles[0].length - 1]);
+                    level[i][j].setNeighbour(Direction.WEST, level[i][level[0].length - 1]);
                 }
-                if(j == tiles[0].length - 1 && tiles[i][j].getGameObject() instanceof Wall == false)
+                if(j == level[0].length - 1 && level[i][j].getGameObject() instanceof Wall == false)
                 {
-                    tiles[i][j].setNeighbour(Direction.EAST, tiles[i][0]);
+                    level[i][j].setNeighbour(Direction.EAST, level[i][0]);
                 }
             }
         }
@@ -268,20 +277,19 @@ public final class Playfield extends JPanel
     }
 
     @Override
-    protected void paintComponent(Graphics g) 
+    public void paintComponent(Graphics g) 
     {	
-	for (int i = 0; i < tiles.length; i++) 
+	for (int i = 0; i < level.length; i++) 
 	{
-	    for (int j = 0; j < tiles[0].length; j++) 
+	    for (int j = 0; j < level[0].length; j++) 
 	    {
-		GameObject gmob = tiles[i][j].getGameObject();
-		Tile tile = tiles[i][j];
+		GameObject gameObject = level[i][j].getGameObject();
+		Tile tile = level[i][j];
 		
 		if(tile != null) tile.draw(g);
-		if(gmob != null) gmob.draw(g);
+		if(gameObject != null) gameObject.draw(g);
 	    }
 	}
-//	repaint();
 	g.setColor(Color.WHITE);
 	g.setFont(new Font("default", Font.BOLD, 16));
 	g.drawString("Score: " + this.score, 10, 15);
@@ -289,16 +297,13 @@ public final class Playfield extends JPanel
 	
 	if(score >= maxScore)
 	{
-	    level++;
+	    levelNumber++;
 	    initLevel();
 	}
     }
-    
-    
-    
-//    @Override
-//    public void paint(Graphics g) 
-//    {
-//	
-//    }
+
+    @Override
+    public void paintComponent() {
+        repaint();
+    }
 }

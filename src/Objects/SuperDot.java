@@ -4,10 +4,11 @@
  * and open the template in the editor.
  */
 
-package projectpacman;
+package Objects;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import projectpacman.Tile;
 
 /**
  *

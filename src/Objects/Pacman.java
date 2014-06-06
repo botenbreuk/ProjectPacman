@@ -4,24 +4,26 @@
  * and open the template in the editor.
  */
 
-package projectpacman;
+package Objects;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
+import projectpacman.Direction;
+import projectpacman.GamePanel;
+import projectpacman.Tile;
 /**
  *
  * @author Robin
  */
-public class Pacman extends GameObject implements KeyListener
+public class Pacman extends MovingObject implements KeyListener
 {
     private long lastPressProcessed = 0;
     
-    public Pacman()
+    public Pacman(GamePanel playfield)
     {
-	
+        super.gamePanel = playfield;
     }
 
     @Override
@@ -29,7 +31,6 @@ public class Pacman extends GameObject implements KeyListener
 
     @Override
     public void keyPressed(KeyEvent e) {
-	
 	if(System.currentTimeMillis() - lastPressProcessed > 150) {
             switch (e.getKeyCode()) {
 		case KeyEvent.VK_UP:
@@ -51,25 +52,31 @@ public class Pacman extends GameObject implements KeyListener
 
     @Override
     public void keyReleased(KeyEvent e) { 
-	
 	lastPressProcessed = 0;
     }
     
-    private void move(Direction d)
+    @Override
+    protected void move(Direction d)
     {
 	Tile tile = super.getTile().getNeigbour(d);
 	GameObject object = tile.getGameObject();
 	System.out.println(object);
 	if(object instanceof Wall == false)
 	{
-	    if(object instanceof Dot) 
-	    {
-		Dot dot = (Dot) object;
-		tile.removeObject();
-	    }
+            eat(object, tile);
 	    tile.addGameObject(this);
 	    super.setTile(tile);
+            super.gamePanel.paintComponent();
 	}
+    }
+    
+    private void eat(Object object, Tile tile){
+        if(object instanceof Dot) 
+        {
+            Dot dot = (Dot) object;
+            super.gamePanel.addScore(dot.getScoreValue());
+            tile.removeGameObject();
+        }
     }
 
     @Override

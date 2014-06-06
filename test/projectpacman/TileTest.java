@@ -6,6 +6,8 @@
 
 package projectpacman;
 
+import Objects.GameObject;
+import Objects.Pacman;
 import java.awt.Graphics;
 import javax.swing.JFrame;
 import org.junit.After;
@@ -167,9 +169,9 @@ public class TileTest {
 	System.out.println("Tests of setGameObject()");
 	
 	//Test 1
-	GameObject gameObject = new Pacman();
+	GameObject gameObject = new Pacman(new Playfield());
 	Tile instance = new Tile(0, 0);
-	instance.setGameObject(gameObject);
+	instance.addGameObject(gameObject);
 	GameObject result = instance.getGameObject();
 	assertEquals(gameObject, result);
 	

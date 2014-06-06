@@ -4,10 +4,11 @@
  * and open the template in the editor.
  */
 
-package projectpacman;
+package Objects;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import projectpacman.Tile;
 
 /**
  *
@@ -15,9 +16,9 @@ import java.awt.Graphics;
  */
 public class Dot extends GameObject
 {
-    private static final int score = 10;
+    private static final int scoreValue = 10;
     
-    public int getScore() { return Dot.score; }
+    public int getScoreValue() { return Dot.scoreValue; }
     
     @Override
     public void draw(Graphics g) {
