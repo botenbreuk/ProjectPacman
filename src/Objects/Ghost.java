@@ -6,7 +6,6 @@
 
 package Objects;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -38,12 +37,16 @@ public class Ghost extends MovingObject
 
             private final Random random = new Random();
 	    @Override
-	    public void run() {
+	    public void run() 
+	    {
                 LinkedList<Direction> exits = getExits();
-                if(exits != null){
+                if(exits != null)
+		{
                     int randomDirection = random.nextInt(exits.size());
                     move(exits.get(randomDirection));
-                }else{
+                }
+		else
+		{
                     //Omdat een spook niet opeens om mag draaien, 
                     //word de direction gereset bij een doodlopend punt.
                     curDir = null;
@@ -56,7 +59,8 @@ public class Ghost extends MovingObject
 	} , 0, 250);
     }
     
-    protected LinkedList<Direction> getExits(){
+    protected LinkedList<Direction> getExits()
+    {
         Tile currentTile = super.getTile();
         LinkedList<Direction> exits = new LinkedList<>();
         //get all neighbours
@@ -80,7 +84,8 @@ public class Ghost extends MovingObject
             return null;
     }
     
-    private boolean canMoveTo(Tile tile){
+    private boolean canMoveTo(Tile tile)
+    {
         return tile.getGameObject() instanceof Wall == false ||
                tile.getGameObject() instanceof GhostWall == true ||
                tile.getGameObject() instanceof Ghost == true;
@@ -104,7 +109,8 @@ public class Ghost extends MovingObject
         }
     }
     
-    private void nextImage(){
+    private void nextImage()
+    {
         imageNumber++;
         if(imageNumber > 4){ imageNumber = 1; }
     }
@@ -125,10 +131,13 @@ public class Ghost extends MovingObject
         
 	//g.setColor(Color.RED);
         //g.fillOval(x, y, tile.getWidth(), tile.getHeight());
-        try {
+        try 
+	{
             BufferedImage img = ImageIO.read(getClass().getResourceAsStream("/images/Derpy"+imageNumber+".png"));
             g.drawImage(img, x, y, null);
-        } catch (IOException ex) {
+        }
+	catch (IOException ex)
+	{
             Logger.getLogger(Ghost.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

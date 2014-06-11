@@ -169,7 +169,7 @@ public class TileTest {
 	System.out.println("Tests of setGameObject()");
 	
 	//Test 1
-	GameObject gameObject = new Pacman(new Playfield());
+	GameObject gameObject = new Pacman(new Playfield(), null);
 	Tile instance = new Tile(0, 0);
 	instance.addGameObject(gameObject);
 	GameObject result = instance.getGameObject();

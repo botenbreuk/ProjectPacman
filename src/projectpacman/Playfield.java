@@ -36,9 +36,7 @@ public final class Playfield extends JPanel implements GamePanel
     private Timer timer;
     
     public int getScore() { return this.score; };
-    public String getTime() { return this.time; } 
-    
-    public void setTime(String time) { this.time = time; }
+    public String getTime() { return this.time; }
     
     @Override
     public void addScore(int score){ this.score += score; }
@@ -49,7 +47,7 @@ public final class Playfield extends JPanel implements GamePanel
         this.levelNumber = 1;
 	this.setVisible(true);
 	initLevel();
-	startTime();
+	
     }
     
     private void setLevel()
@@ -288,7 +286,7 @@ public final class Playfield extends JPanel implements GamePanel
 			seconds = 1;
 			minutes += 1;
 		    }
-		    setTime(String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
+		    //(String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
 		}
 	    }, 0, 1000);
 	}
@@ -311,7 +309,7 @@ public final class Playfield extends JPanel implements GamePanel
 	g.setColor(Color.WHITE);
 	g.setFont(new Font("default", Font.BOLD, 16));
 	g.drawString("Score: " + this.score, 10, 15);
-	g.drawString("Time: " + getTime(), this.getWidth() - 100, 15);
+//	g.drawString("Time: " + getTime(), this.getWidth() - 100, 15);
 	
 	if(score >= maxScore)
 	{
