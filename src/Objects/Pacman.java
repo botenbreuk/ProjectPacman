@@ -13,7 +13,7 @@ import java.awt.event.KeyListener;
 import java.util.Timer;
 import java.util.TimerTask;
 import projectpacman.Direction;
-import projectpacman.GamePanel;
+import Interfaces.GamePanel;
 import projectpacman.Tile;
 /**
  *
@@ -27,7 +27,7 @@ public class Pacman extends MovingObject implements KeyListener
     
     public Pacman(GamePanel playfield, Tile startingTile)
     {
-        super.gamePanel = playfield;
+        super(playfield, startingTile);
         Timer timer = new Timer();
 	timer.schedule(new TimerTask() {
             @Override
@@ -74,6 +74,7 @@ public class Pacman extends MovingObject implements KeyListener
             if(object instanceof Wall == false)
             {
                 eat(object, tile);
+                super.getTile().removeGameObject();
                 tile.addGameObject(this);
                 super.setTile(tile);
                 super.gamePanel.paintComponent();
@@ -103,6 +104,13 @@ public class Pacman extends MovingObject implements KeyListener
             super.gamePanel.addScore(dot.getScoreValue());
             tile.removeGameObject();
         }
+    }
+
+    @Override
+    public void resetPosition() {
+        super.getTile().removeGameObject();
+        startingTile.addGameObject(this);
+        super.setTile(super.startingTile);
     }
 
     @Override

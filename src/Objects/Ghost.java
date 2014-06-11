@@ -18,7 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import projectpacman.Direction;
-import projectpacman.GamePanel;
+import Interfaces.GamePanel;
 import projectpacman.Tile;
 
 /**
@@ -32,7 +32,7 @@ public class Ghost extends MovingObject
     
     public Ghost(GamePanel playfield, Tile startingTile)
     {
-        super.gamePanel = playfield;
+        super(playfield, startingTile);
 	Timer timer = new Timer();
 	timer.schedule(new TimerTask() {
 
@@ -91,20 +91,29 @@ public class Ghost extends MovingObject
     {
 	Tile tile = super.getTile().getNeigbour(d);
         curDir = d;
-        //if(tile != null){
-            //if(canMoveTo(tile)){
-                super.getTile().removeGameObject();
-                tile.addGameObject(this);
-                super.setTile(tile);
-                super.gamePanel.paintComponent();
-            //}
-        //}
-        nextImage();
+        
+        if(tile.getGameObject() instanceof Pacman){
+            //System.out.println("Ik ben op pacman");
+            gamePanel.restart();
+        }else{
+            super.getTile().removeGameObject();
+            tile.addGameObject(this);
+            super.setTile(tile);
+            super.gamePanel.paintComponent();
+            nextImage();
+        }
     }
     
     private void nextImage(){
         imageNumber++;
         if(imageNumber > 4){ imageNumber = 1; }
+    }
+
+    @Override
+    public void resetPosition() {
+        super.getTile().removeGameObject();
+        startingTile.addGameObject(this);
+        super.setTile(super.startingTile);
     }
     
     @Override
@@ -117,7 +126,7 @@ public class Ghost extends MovingObject
 	//g.setColor(Color.RED);
         //g.fillOval(x, y, tile.getWidth(), tile.getHeight());
         try {
-            BufferedImage img = ImageIO.read(getClass().getResourceAsStream("/images/DerpyGrey"+imageNumber+".png"));
+            BufferedImage img = ImageIO.read(getClass().getResourceAsStream("/images/Derpy"+imageNumber+".png"));
             g.drawImage(img, x, y, null);
         } catch (IOException ex) {
             Logger.getLogger(Ghost.class.getName()).log(Level.SEVERE, null, ex);

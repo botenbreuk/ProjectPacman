@@ -4,9 +4,7 @@
  * and open the template in the editor.
  */
 
-package projectpacman;
-
-import java.awt.Graphics;
+package Interfaces;
 
 /**
  *
@@ -15,4 +13,5 @@ import java.awt.Graphics;
 public interface GamePanel {
     public void paintComponent();
     public void addScore(int amount);
+    public void restart();
 }

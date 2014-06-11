@@ -6,14 +6,23 @@
 
 package Objects;
 
+import Interfaces.GamePanel;
 import projectpacman.Direction;
-import projectpacman.GamePanel;
+import projectpacman.Tile;
 
 /**
  *
  * @author Bouke
  */
 public abstract class MovingObject extends GameObject{
+    protected Tile startingTile;
     protected GamePanel gamePanel;
+    
+    public MovingObject(GamePanel playfield, Tile startingTile){
+        this.gamePanel = playfield;
+        this.startingTile = startingTile;
+    }
+    
     protected abstract void move(Direction d);
+    public abstract void resetPosition();
 }

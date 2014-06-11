@@ -6,6 +6,7 @@
 
 package projectpacman;
 
+import Interfaces.GamePanel;
 import Objects.GameObject;
 import Objects.GhostWall;
 import Objects.Pacman;
@@ -13,6 +14,7 @@ import Objects.Dot;
 import Objects.SuperDot;
 import Objects.Wall;
 import Objects.Ghost;
+import Objects.MovingObject;
 import java.awt.*;
 import java.awt.event.KeyListener;
 import java.util.Timer;
@@ -238,6 +240,21 @@ public final class Playfield extends JPanel implements GamePanel
                 if(j == level[0].length - 1 && level[i][j].getGameObject() instanceof Wall == false)
                 {
                     level[i][j].setNeighbour(Direction.EAST, level[i][0]);
+                }
+            }
+        }
+    }
+    
+    @Override
+    public void restart()
+    {
+        for(int i = 0; i < level.length; i++) 
+        {
+            for(int j = 0; j < level[0].length; j++) 
+            {
+                GameObject object = level[i][j].getGameObject();
+                if(object instanceof MovingObject){
+                    ((MovingObject)object).resetPosition();
                 }
             }
         }
