@@ -7,17 +7,16 @@
 package projectpacman;
 
 import Interfaces.GamePanel;
-import Objects.GameObject;
-import Objects.GhostWall;
-import Objects.Pacman;
 import Objects.Dot;
+import Objects.GameObject;
+import Objects.Ghost;
+import Objects.GhostWall;
+import Objects.MovingObject;
+import Objects.Pacman;
 import Objects.SuperDot;
 import Objects.Wall;
-import Objects.Ghost;
-import Objects.MovingObject;
 import java.awt.*;
 import java.awt.event.KeyListener;
-import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.*;
 
@@ -33,7 +32,6 @@ public final class Playfield extends JPanel implements GamePanel
     private int maxScore = 0;
     private int score = 0;
     private String time;
-    private Timer timer;
     
     public int getScore() { return this.score; };
     public String getTime() { return this.time; }
@@ -258,40 +256,6 @@ public final class Playfield extends JPanel implements GamePanel
         }
     }
     
-    private void startTime()
-    {
-	this.time = "00:00";
-	if(timer != null)
-	{
-	    timer.cancel();
-	    timer = null;
-	    startTime();
-	}
-	else
-	{
-	    timer = new Timer();
-	    timer.schedule(new TimerTask() 
-	    {
-		private int minutes = 0;
-		private int seconds = 0;
-		@Override
-		public void run() {
-
-		    if(seconds < 59)
-		    {
-			seconds += 1;
-		    }
-		    else
-		    {
-			seconds = 1;
-			minutes += 1;
-		    }
-		    //(String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
-		}
-	    }, 0, 1000);
-	}
-    }
-
     @Override
     public void paintComponent(Graphics g) 
     {	
