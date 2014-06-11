@@ -16,7 +16,10 @@ import projectpacman.Tile;
  */
 public class SuperDot extends Dot
 {
-    private static final int score = 50;
+    private static final int scoreValue = 50;
+    
+    @Override
+    public int getScoreValue() { return SuperDot.scoreValue; }
     
     @Override
     public void draw(Graphics g) {

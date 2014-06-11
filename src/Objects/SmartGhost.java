@@ -8,24 +8,22 @@ package Objects;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.Random;
 import projectpacman.Tile;
 
 /**
  *
- * @author Robin
+ * @author Bouke
  */
-public class GhostWall extends Wall
-{
+public class SmartGhost extends GameObject{
+
     @Override
     public void draw(Graphics g) {
-	Tile tile = super.getTile();
+        Tile tile = super.getTile();
 	int x = tile.getWidth() * tile.getXPos();
 	int y = tile.getHeight() * tile.getYPos();
 	
-        //Random random = new Random();
-	//g.setColor(new Color(random.nextInt(255), random.nextInt(255), random.nextInt(255)));
-        g.setColor(new Color(255, 255 ,255));
-	g.fillRect(x, y, tile.getWidth(), tile.getHeight() / 4);
+	g.setColor(Color.RED);
+	g.fillOval(x, y, tile.getWidth(), tile.getHeight());
     }
+    
 }

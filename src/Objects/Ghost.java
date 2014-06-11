@@ -8,9 +8,15 @@ package Objects;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.LinkedList;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import projectpacman.Direction;
 import projectpacman.GamePanel;
 import projectpacman.Tile;
@@ -21,61 +27,84 @@ import projectpacman.Tile;
  */
 public class Ghost extends MovingObject
 {
-    public Ghost(GamePanel playfield)
+    private Direction curDir = Direction.SOUTH;
+    private int imageNumber = 1;
+    
+    public Ghost(GamePanel playfield, Tile startingTile)
     {
         super.gamePanel = playfield;
 	Timer timer = new Timer();
 	timer.schedule(new TimerTask() {
 
             private final Random random = new Random();
-            private Direction curDir = Direction.SOUTH;
 	    @Override
 	    public void run() {
-		
-		int randomDirection = random.nextInt(4);
-		
-                if(randomDirection == 0 && curDir != Direction.NORTH)
-                {
-		    curDir = Direction.NORTH;
-                    move(Direction.NORTH);
+                LinkedList<Direction> exits = getExits();
+                if(exits != null){
+                    int randomDirection = random.nextInt(exits.size());
+                    move(exits.get(randomDirection));
+                }else{
+                    //Omdat een spook niet opeens om mag draaien, 
+                    //word de direction gereset bij een doodlopend punt.
+                    curDir = null;
+                    //Roep daarna run recursief aan.
+                    //NOTE: als een spook ingesloten is tussen 4 muren vormt dit een endless loop
+                    //run();
                 }
-                if(randomDirection == 1 && curDir != Direction.EAST)
-                {
-		    curDir = Direction.EAST;
-                    move(Direction.EAST);
-                }
-                if(randomDirection == 2 && curDir != Direction.SOUTH)
-                {
-		    curDir = Direction.SOUTH;
-                    move(Direction.SOUTH);
-                }
-                if(randomDirection == 3 && curDir != Direction.WEST)
-                {
-		    curDir = Direction.WEST;
-                    move(Direction.WEST);
-                }
-		System.out.println(randomDirection);
 	    }
 	    
-	} , 0, 1000);
+	} , 0, 250);
+    }
+    
+    protected LinkedList<Direction> getExits(){
+        Tile currentTile = super.getTile();
+        LinkedList<Direction> exits = new LinkedList<>();
+        //get all neighbours
+        Tile north = currentTile.getNeigbour(Direction.NORTH); 
+        Tile south = currentTile.getNeigbour(Direction.SOUTH);
+        Tile east = currentTile.getNeigbour(Direction.EAST);
+        Tile west = currentTile.getNeigbour(Direction.WEST);
+        //add the neighbours you can move towards to the list
+        if(north != null && canMoveTo(north) && curDir != Direction.SOUTH)
+            exits.add(Direction.NORTH); 
+        if(south != null && canMoveTo(south) && curDir != Direction.NORTH)
+                exits.add(Direction.SOUTH);
+        if(east != null && canMoveTo(east) && curDir != Direction.WEST)
+            exits.add(Direction.EAST);
+        if(west != null && canMoveTo(west) && curDir != Direction.EAST)
+            exits.add(Direction.WEST);
+        
+        if(!exits.isEmpty())
+            return exits;
+        else
+            return null;
+    }
+    
+    private boolean canMoveTo(Tile tile){
+        return tile.getGameObject() instanceof Wall == false ||
+               tile.getGameObject() instanceof GhostWall == true ||
+               tile.getGameObject() instanceof Ghost == true;
     }
     
     @Override
     protected void move(Direction d)
     {
 	Tile tile = super.getTile().getNeigbour(d);
-        if(tile != null)
-        {
-            if(tile.getGameObject() instanceof Wall == false ||
-               tile.getGameObject() instanceof GhostWall == true ||
-               tile.getGameObject() instanceof Ghost == true)
-            {
-		super.getTile().removeGameObject();
+        curDir = d;
+        //if(tile != null){
+            //if(canMoveTo(tile)){
+                super.getTile().removeGameObject();
                 tile.addGameObject(this);
                 super.setTile(tile);
                 super.gamePanel.paintComponent();
-            }
-        }
+            //}
+        //}
+        nextImage();
+    }
+    
+    private void nextImage(){
+        imageNumber++;
+        if(imageNumber > 4){ imageNumber = 1; }
     }
     
     @Override
@@ -84,8 +113,14 @@ public class Ghost extends MovingObject
 	Tile tile = super.getTile();
 	int x = tile.getWidth() * tile.getXPos();
 	int y = tile.getHeight() * tile.getYPos();
-	
-	g.setColor(Color.RED);
-	g.fillOval(x, y, tile.getWidth(), tile.getHeight());
+        
+	//g.setColor(Color.RED);
+        //g.fillOval(x, y, tile.getWidth(), tile.getHeight());
+        try {
+            BufferedImage img = ImageIO.read(getClass().getResourceAsStream("/images/DerpyGrey"+imageNumber+".png"));
+            g.drawImage(img, x, y, null);
+        } catch (IOException ex) {
+            Logger.getLogger(Ghost.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
