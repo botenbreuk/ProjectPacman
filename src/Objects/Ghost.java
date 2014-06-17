@@ -6,113 +6,82 @@
 
 package Objects;
 
+import Pathfinders.RandomPath;
+import Interfaces.Pathfinder;
+import Interfaces.GamePanel;
+import Pathfinders.Breadthfirst;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import projectpacman.Direction;
-import Interfaces.GamePanel;
 import projectpacman.Tile;
 
 /**
  *
  * @author Robin
  */
-public class Ghost extends MovingObject
-{
-    private Direction curDir = Direction.SOUTH;
-    private int imageNumber = 1;
+public class Ghost extends MovingObject{
+    private GhostState state;
+    private Pathfinder pathfinder;
     
-    public Ghost(GamePanel playfield, Tile startingTile)
+    public Ghost(GamePanel playfield, Tile startingTile, GhostState state)
     {
         super(playfield, startingTile);
+        this.state = state;
+        initPathfinder();
 	Timer timer = new Timer();
 	timer.schedule(new TimerTask() {
-
             private final Random random = new Random();
 	    @Override
 	    public void run() 
 	    {
-                LinkedList<Direction> exits = getExits();
-                if(exits != null)
+                Tile t = pathfinder.getExit(getTile());
+                if(t != null)
 		{
-                    int randomDirection = random.nextInt(exits.size());
-                    move(exits.get(randomDirection));
+                    move(t);
                 }
 		else
 		{
                     //Omdat een spook niet opeens om mag draaien, 
                     //word de direction gereset bij een doodlopend punt.
-                    curDir = null;
-                    //Roep daarna run recursief aan.
-                    //NOTE: als een spook ingesloten is tussen 4 muren vormt dit een endless loop
-                    //run();
+                    //curDir = Direction.NONE;
                 }
 	    }
 	    
 	} , 0, 250);
     }
     
-    protected LinkedList<Direction> getExits()
-    {
-        Tile currentTile = super.getTile();
-        LinkedList<Direction> exits = new LinkedList<>();
-        //get all neighbours
-        Tile north = currentTile.getNeigbour(Direction.NORTH); 
-        Tile south = currentTile.getNeigbour(Direction.SOUTH);
-        Tile east = currentTile.getNeigbour(Direction.EAST);
-        Tile west = currentTile.getNeigbour(Direction.WEST);
-        //add the neighbours you can move towards to the list
-        if(north != null && canMoveTo(north) && curDir != Direction.SOUTH)
-            exits.add(Direction.NORTH); 
-        if(south != null && canMoveTo(south) && curDir != Direction.NORTH)
-                exits.add(Direction.SOUTH);
-        if(east != null && canMoveTo(east) && curDir != Direction.WEST)
-            exits.add(Direction.EAST);
-        if(west != null && canMoveTo(west) && curDir != Direction.EAST)
-            exits.add(Direction.WEST);
-        
-        if(!exits.isEmpty())
-            return exits;
-        else
-            return null;
-    }
-    
-    private boolean canMoveTo(Tile tile)
-    {
-        return tile.getGameObject() instanceof Wall == false ||
-               tile.getGameObject() instanceof GhostWall == true ||
-               tile.getGameObject() instanceof Ghost == true;
+    private void initPathfinder(){
+        switch(state){
+            case DUMB:
+                pathfinder = new RandomPath();
+                break;
+            case SMART:
+                pathfinder = new Breadthfirst();
+                break;
+        }
     }
     
     @Override
-    protected void move(Direction d)
+    protected void move(Tile t)
     {
-	Tile tile = super.getTile().getNeigbour(d);
-        curDir = d;
+	//Tile tile = super.getTile().getNeigbour(d);
+        //curDir = d;
         
-        if(tile.getGameObject() instanceof Pacman){
+        if(t.getGameObject() instanceof Pacman){
             //System.out.println("Ik ben op pacman");
             gamePanel.restart();
         }else{
             super.getTile().removeGameObject();
-            tile.addGameObject(this);
-            super.setTile(tile);
+            t.addGameObject(this);
+            super.setTile(t);
             super.gamePanel.paintComponent();
-            nextImage();
         }
-    }
-    
-    private void nextImage()
-    {
-        imageNumber++;
-        if(imageNumber > 4){ imageNumber = 1; }
     }
 
     @Override
@@ -132,12 +101,30 @@ public class Ghost extends MovingObject
 	//g.setColor(Color.RED);
         //g.fillOval(x, y, tile.getWidth(), tile.getHeight());
         try 
-	{
-            BufferedImage img = ImageIO.read(getClass().getResourceAsStream("/images/Derpy"+imageNumber+".png"));
+        {
+            BufferedImage img = ImageIO.read(getClass().getResourceAsStream("/images/ClydeIdle.png"));
+            /*switch(curDir) {
+            case NORTH:
+                img = ImageIO.read(getClass().getResourceAsStream("/images/ClydeUp.png"));
+                break;
+            case SOUTH:
+                img = ImageIO.read(getClass().getResourceAsStream("/images/ClydeDown.png"));
+                break;
+            case WEST:
+                img = ImageIO.read(getClass().getResourceAsStream("/images/ClydeLeft.png"));
+                break;
+            case EAST:
+                img = ImageIO.read(getClass().getResourceAsStream("/images/ClydeRight.png"));
+                break;
+            default:
+                img = ImageIO.read(getClass().getResourceAsStream("/images/ClydeIdle.png"));
+                break;
+            }*/
+
             g.drawImage(img, x, y, null);
         }
-	catch (IOException ex)
-	{
+        catch (IOException ex)
+        {
             Logger.getLogger(Ghost.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

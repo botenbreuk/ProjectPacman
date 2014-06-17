@@ -4,17 +4,14 @@
  * and open the template in the editor.
  */
 
-package projectpacman;
+package Objects;
 
 /**
  *
- * @author Robin
+ * @author Bouke
  */
-public enum Direction 
-{
-    NORTH,
-    EAST,
-    SOUTH,
-    WEST,
-    NONE;
+public enum GhostState {
+    DUMB,
+    SMART,
+    FRIGHTENED;
 }

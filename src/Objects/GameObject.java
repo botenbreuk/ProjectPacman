@@ -22,24 +22,4 @@ public abstract class GameObject
     public void setTile(Tile tile) { this.tile = tile; }
     
     public abstract void draw(Graphics g);
-    
-    @Override
-    public String toString()
-    {
-	String string = "";
-	
-	if(this instanceof Wall)
-	{
-	    string = "Ik ben een muur";
-	}
-	if(this instanceof Dot)
-	{
-	    string = "Ik ben een punt";
-	}
-	if(this instanceof Ghost)
-	{
-	    string = "Ik ben een geest";
-	}
-	return string;
-    }
 }

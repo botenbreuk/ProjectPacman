@@ -4,17 +4,14 @@
  * and open the template in the editor.
  */
 
-package projectpacman;
+package Interfaces;
+
+import projectpacman.*;
 
 /**
  *
- * @author Robin
+ * @author Bouke
  */
-public enum Direction 
-{
-    NORTH,
-    EAST,
-    SOUTH,
-    WEST,
-    NONE;
+public interface Pathfinder {
+    public Tile getExit(Tile tile);
 }

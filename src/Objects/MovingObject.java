@@ -23,6 +23,6 @@ public abstract class MovingObject extends GameObject{
         this.startingTile = startingTile;
     }
     
-    protected abstract void move(Direction d);
+    protected abstract void move(Tile t);
     public abstract void resetPosition();
 }

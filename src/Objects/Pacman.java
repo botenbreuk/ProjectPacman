@@ -21,7 +21,6 @@ import projectpacman.Tile;
  */
 public class Pacman extends MovingObject implements KeyListener
 {
-    //private long lastPressProcessed = 0;
     private Direction direction = Direction.WEST;
     private Direction preferredDirection = Direction.WEST;
     
@@ -33,9 +32,13 @@ public class Pacman extends MovingObject implements KeyListener
             @Override
             public void run(){
                 setDirection();
-                move(direction);
+                move(getTile(direction));
             }
         }, 0, 250);
+    }
+    
+    private Tile getTile(Direction d){
+        return super.getTile().getNeigbour(d);
     }
 
     @Override
@@ -61,22 +64,20 @@ public class Pacman extends MovingObject implements KeyListener
 
     @Override
     public void keyReleased(KeyEvent e) { 
-	//lastPressProcessed = 0;
+        
     }
     
     @Override
-    protected void move(Direction d)
+    protected void move(Tile t)
     {
-	Tile tile = super.getTile().getNeigbour(d);
-        if(tile != null){
-           GameObject object = tile.getGameObject();
-            //System.out.println(object);
+        if(t != null){
+           GameObject object = t.getGameObject();
             if(object instanceof Wall == false)
             {
-                eat(object, tile);
+                eat(object, t);
                 super.getTile().removeGameObject();
-                tile.addGameObject(this);
-                super.setTile(tile);
+                t.addGameObject(this);
+                super.setTile(t);
                 super.gamePanel.paintComponent();
             } 
         }
