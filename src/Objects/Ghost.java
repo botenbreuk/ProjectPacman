@@ -103,7 +103,7 @@ public class Ghost extends MovingObject{
         try 
         {
             BufferedImage img = ImageIO.read(getClass().getResourceAsStream("/images/ClydeIdle.png"));
-            /*switch(curDir) {
+            switch(pathfinder.getCurDir()) {
             case NORTH:
                 img = ImageIO.read(getClass().getResourceAsStream("/images/ClydeUp.png"));
                 break;
@@ -119,7 +119,7 @@ public class Ghost extends MovingObject{
             default:
                 img = ImageIO.read(getClass().getResourceAsStream("/images/ClydeIdle.png"));
                 break;
-            }*/
+            }
 
             g.drawImage(img, x, y, null);
         }

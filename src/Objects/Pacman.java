@@ -14,6 +14,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 import projectpacman.Direction;
 import Interfaces.GamePanel;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import projectpacman.Tile;
 /**
  *
@@ -23,6 +28,7 @@ public class Pacman extends MovingObject implements KeyListener
 {
     private Direction direction = Direction.WEST;
     private Direction preferredDirection = Direction.WEST;
+    String currentImagePath = "/images/PacManClosed.png";
     
     public Pacman(GamePanel playfield, Tile startingTile)
     {
@@ -79,6 +85,7 @@ public class Pacman extends MovingObject implements KeyListener
                 t.addGameObject(this);
                 super.setTile(t);
                 super.gamePanel.paintComponent();
+                setImagePath();
             } 
         }
     }
@@ -113,6 +120,27 @@ public class Pacman extends MovingObject implements KeyListener
         startingTile.addGameObject(this);
         super.setTile(super.startingTile);
     }
+    
+    private void setImagePath(){
+            if(!currentImagePath.equals("/images/PacManClosed.png")){
+                currentImagePath = "/images/PacManClosed.png";
+            }else{
+                switch(direction){
+                    case NORTH:
+                        currentImagePath = "/images/PacManUp.png";
+                        break;
+                    case SOUTH:
+                        currentImagePath = "/images/PacManDown.png";
+                        break;
+                    case EAST:
+                        currentImagePath = "/images/PacManRight.png";
+                        break;
+                    case WEST:
+                        currentImagePath = "/images/PacManLeft.png";
+                        break;
+                }
+            }
+    }
 
     @Override
     public void draw(Graphics g) {
@@ -120,7 +148,16 @@ public class Pacman extends MovingObject implements KeyListener
 	int x = tile.getWidth() * tile.getXPos();
 	int y = tile.getHeight() * tile.getYPos();
 	
-	g.setColor(Color.YELLOW);
-	g.fillOval(x, y, tile.getWidth(), tile.getHeight());
+	//g.setColor(Color.YELLOW);
+	//g.fillOval(x, y, tile.getWidth(), tile.getHeight());
+        try 
+        {
+            BufferedImage img = ImageIO.read(getClass().getResourceAsStream(currentImagePath));
+            g.drawImage(img, x, y, null);
+        }
+        catch (IOException ex)
+        {
+            Logger.getLogger(Ghost.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

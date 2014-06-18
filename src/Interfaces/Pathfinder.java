@@ -14,4 +14,5 @@ import projectpacman.*;
  */
 public interface Pathfinder {
     public Tile getExit(Tile tile);
+    public Direction getCurDir();
 }

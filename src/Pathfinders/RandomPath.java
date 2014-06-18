@@ -66,4 +66,9 @@ public class RandomPath implements Pathfinder{
                tile.getGameObject() instanceof GhostWall == true
                );
     }
+    
+    @Override
+    public Direction getCurDir(){
+        return curDir;
+    }
 }
