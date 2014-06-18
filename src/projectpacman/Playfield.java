@@ -40,6 +40,46 @@ public final class Playfield extends JPanel implements GamePanel
     public void addScore(int score){ this.score += score; }
     //public void resetScore() { this.score = 0; }
     
+    private String[] imgBlinky = new String[]{
+        "/images/BlinkyUp.png",
+        "/images/BlinkyDown.png",
+        "/images/BlinkyRight.png",
+        "/images/BlinkyLeft.png",
+        "/images/BlinkyIdle.png"
+    };
+            
+    private String[] imgInky = new String[]{
+        "/images/InkyUp.png",
+        "/images/InkyDown.png",
+        "/images/InkyRight.png",
+        "/images/InkyLeft.png",
+        "/images/InkyIdle.png"
+    };
+    
+    private String[] imgPinky = new String[]{
+        "/images/PinkyUp.png",
+        "/images/PinkyDown.png",
+        "/images/PinkyRight.png",
+        "/images/PinkyLeft.png",
+        "/images/PinkyIdle.png"
+    };
+    
+    private String[] imgClyde = new String[]{
+        "/images/ClydeUp.png",
+        "/images/ClydeDown.png",
+        "/images/ClydeRight.png",
+        "/images/ClydeLeft.png",
+        "/images/ClydeIdle.png"
+    };
+    
+    private String[] imgDerpy = new String[]{
+        "/images/DerpyUp.png",
+        "/images/DerpyDown.png",
+        "/images/DerpyRight.png",
+        "/images/DerpyLeft.png",
+        "/images/DerpyIdle.png"
+    };
+    
     public Playfield()
     {
         this.levelNumber = 1;
@@ -53,18 +93,18 @@ public final class Playfield extends JPanel implements GamePanel
 	int[][] level1 = new int[][]
 	{
 	    {11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11},
-	    {11, 14, 14, 14, 14, 14, 14, 14, 14, 11, 14, 14, 14, 14, 14, 14, 14, 20, 11},
+	    {11, 14, 14, 14, 14, 14, 14, 14, 14, 11, 14, 14, 14, 14, 14, 14, 14, 14, 11},
 	    {11, 15, 11, 11, 14, 11, 11, 11, 14, 11, 14, 11, 11, 11, 14, 11, 11, 15, 11},
 	    {11, 14, 11, 11, 14, 11, 11, 11, 14, 11, 14, 11, 11, 11, 14, 11, 11, 14, 11},
 	    {11, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 11},
 	    {11, 14, 11, 11, 14, 11, 14, 11, 11, 11, 11, 11, 14, 11, 14, 11, 11, 14, 11},
 	    {11, 14, 14, 14, 14, 11, 14, 14, 14, 11, 14, 14, 14, 11, 14, 14, 14, 14, 11},
 	    {11, 11, 11, 11, 14, 11, 11, 11, 14, 11, 14, 11, 11, 11, 14, 11, 11, 11, 11},
-	    {10, 10, 10, 11, 14, 11, 14, 14, 14, 14, 14, 14, 14, 11, 14, 11, 10, 10, 10},
+	    {10, 10, 10, 11, 14, 11, 14, 14, 14, 20, 14, 14, 14, 11, 14, 11, 10, 10, 10},
 	    {11, 11, 11, 11, 14, 11, 14, 11, 11, 12, 11, 11, 14, 11, 14, 11, 11, 11, 11},
-	    {14, 14, 14, 14, 14, 14, 14, 11, 19, 19, 19, 11, 14, 14, 14, 14, 14, 14, 14},
+	    {14, 14, 14, 14, 14, 14, 14, 11, 21, 22, 23, 11, 14, 14, 14, 14, 14, 14, 14},
 	    {11, 11, 11, 11, 14, 11, 14, 11, 11, 11, 11, 11, 14, 11, 14, 11, 11, 11, 11},
-	    {10, 10, 10, 11, 14, 11, 14, 14, 14, 14, 14, 14, 14, 11, 14, 11, 10, 10, 10},
+	    {10, 10, 10, 11, 14, 11, 14, 14, 14, 19, 14, 14, 14, 11, 14, 11, 10, 10, 10},
 	    {11, 11, 11, 11, 14, 11, 14, 11, 11, 11, 11, 11, 14, 11, 14, 11, 11, 11, 11},
 	    {11, 14, 14, 14, 14, 14, 14, 14, 14, 11, 14, 14, 14, 14, 14, 14, 14, 14, 11},
 	    {11, 14, 11, 11, 14, 11, 11, 11, 14, 11, 14, 11, 11, 11, 14, 11, 11, 14, 11},
@@ -72,7 +112,7 @@ public final class Playfield extends JPanel implements GamePanel
 	    {11, 11, 14, 11, 14, 11, 14, 11, 11, 11, 11, 11, 14, 11, 14, 11, 14, 11, 11},
 	    {11, 14, 14, 14, 14, 11, 14, 14, 14, 11, 14, 14, 14, 11, 14, 14, 14, 14, 11},
 	    {11, 15, 11, 11, 11, 11, 11, 11, 14, 11, 14, 11, 11, 11, 11, 11, 11, 15, 11},
-	    {11, 18, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 11},
+	    {11, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 11},
 	    {11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11}
 	};
 	
@@ -179,21 +219,36 @@ public final class Playfield extends JPanel implements GamePanel
 			tile.addGameObject(superDot);
 			maxScore += superDot.getScoreValue();
 			break;
-		    case 18:
+		    case 19:
 			Pacman pacman = new Pacman(this, tile);
                         pacman.setTile(tile);
 			tile.addGameObject(pacman);
 			this.addKeyListener((KeyListener) pacman);
 			break;
-		    case 19:
-			Ghost dumbGhost = new Ghost(this, tile, GhostState.DUMB);
-                        dumbGhost.setTile(tile);
-			tile.addGameObject(dumbGhost);
+		    case 20:
+			Ghost blinky = new Ghost(this, tile, GhostState.SMART, imgBlinky);
+                        blinky.setTile(tile);
+			tile.addGameObject(blinky);
 			break;
-                    case 20:
-                        Ghost smartGhost = new Ghost(this, tile, GhostState.SMART);
-                        smartGhost.setTile(tile);
-			tile.addGameObject(smartGhost);
+                    case 21:
+                        Ghost inky = new Ghost(this, tile, GhostState.DUMB, imgInky);
+                        inky.setTile(tile);
+			tile.addGameObject(inky);
+			break;
+                    case 22:
+                        Ghost pinky = new Ghost(this, tile, GhostState.DUMB, imgPinky);
+                        pinky.setTile(tile);
+			tile.addGameObject(pinky);
+			break;
+                    case 23:
+                        Ghost clyde = new Ghost(this, tile, GhostState.DUMB, imgClyde);
+                        clyde.setTile(tile);
+			tile.addGameObject(clyde);
+			break;
+                    case 24:
+                        Ghost derpy = new Ghost(this, tile, GhostState.DUMB, imgDerpy);
+                        derpy.setTile(tile);
+			tile.addGameObject(derpy);
 			break;
 		}
 		level[i][j] = tile;

@@ -28,11 +28,13 @@ import projectpacman.Tile;
 public class Ghost extends MovingObject{
     private GhostState state;
     private Pathfinder pathfinder;
+    private String[] imgSet;
     
-    public Ghost(GamePanel playfield, Tile startingTile, GhostState state)
+    public Ghost(GamePanel playfield, Tile startingTile, GhostState state, String[] imgSet)
     {
         super(playfield, startingTile);
         this.state = state;
+        this.imgSet = imgSet;
         initPathfinder();
 	Timer timer = new Timer();
 	timer.schedule(new TimerTask() {
@@ -102,22 +104,22 @@ public class Ghost extends MovingObject{
         //g.fillOval(x, y, tile.getWidth(), tile.getHeight());
         try 
         {
-            BufferedImage img = ImageIO.read(getClass().getResourceAsStream("/images/ClydeIdle.png"));
+            BufferedImage img;
             switch(pathfinder.getCurDir()) {
             case NORTH:
-                img = ImageIO.read(getClass().getResourceAsStream("/images/ClydeUp.png"));
+                img = ImageIO.read(getClass().getResourceAsStream(imgSet[0]));
                 break;
             case SOUTH:
-                img = ImageIO.read(getClass().getResourceAsStream("/images/ClydeDown.png"));
-                break;
-            case WEST:
-                img = ImageIO.read(getClass().getResourceAsStream("/images/ClydeLeft.png"));
+                img = ImageIO.read(getClass().getResourceAsStream(imgSet[1]));
                 break;
             case EAST:
-                img = ImageIO.read(getClass().getResourceAsStream("/images/ClydeRight.png"));
+                img = ImageIO.read(getClass().getResourceAsStream(imgSet[2]));
+                break;
+            case WEST:
+                img = ImageIO.read(getClass().getResourceAsStream(imgSet[3]));
                 break;
             default:
-                img = ImageIO.read(getClass().getResourceAsStream("/images/ClydeIdle.png"));
+                img = ImageIO.read(getClass().getResourceAsStream(imgSet[4]));
                 break;
             }
 
