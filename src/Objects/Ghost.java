@@ -68,7 +68,7 @@ public class Ghost extends MovingObject{
     }
     
     public GhostState getState(){ return currentState; }
-    public void resetState(){ currentState = defaultState; };
+    public void resetState(){ setState(defaultState); };
     public void setState(GhostState state){ 
         this.currentState = state; 
         setPathfinder();
