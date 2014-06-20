@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package Objects;
+package Enums;
 
 /**
  *
@@ -13,5 +13,6 @@ package Objects;
 public enum GhostState {
     DUMB,
     SMART,
-    FRIGHTENED;
+    EATEN,
+    SCARED;
 }

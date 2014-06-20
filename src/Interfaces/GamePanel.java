@@ -6,6 +6,8 @@
 
 package Interfaces;
 
+import Enums.GameState;
+
 /**
  *
  * @author Bouke
@@ -14,4 +16,5 @@ public interface GamePanel {
     public void paintComponent();
     public void addScore(int amount);
     public void restart();
+    public void setGameState(GameState state);
 }

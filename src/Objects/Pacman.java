@@ -6,7 +6,8 @@
 
 package Objects;
 
-import java.awt.Color;
+import Enums.GameState;
+import Enums.GhostState;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -103,14 +104,19 @@ public class Pacman extends MovingObject implements KeyListener
         if(object instanceof Dot) 
         {
             if (object instanceof SuperDot){
-                SuperDot superDot = (SuperDot) object;
-                super.gamePanel.addScore(superDot.getScoreValue());
+                super.gamePanel.addScore(((SuperDot)object).getScoreValue());
+                energize();
                 tile.removeGameObject();
                 return;
             }
-            Dot dot = (Dot) object;
-            super.gamePanel.addScore(dot.getScoreValue());
+            super.gamePanel.addScore(((Dot)object).getScoreValue());
             tile.removeGameObject();
+        }else if(object instanceof Ghost){
+            if(((Ghost)object).getState() == GhostState.SCARED){
+                ((Ghost)object).setState(GhostState.EATEN);
+            }else if(((Ghost)object).getState() != GhostState.EATEN){
+                gamePanel.restart();
+            }
         }
     }
 
@@ -119,6 +125,12 @@ public class Pacman extends MovingObject implements KeyListener
         super.getTile().removeGameObject();
         startingTile.addGameObject(this);
         super.setTile(super.startingTile);
+        direction = Direction.WEST;
+        currentImagePath = "/images/PacManClosed.png";
+    }
+    
+    private void energize(){
+        gamePanel.setGameState(GameState.SUPERPACMAN);
     }
     
     private void setImagePath(){

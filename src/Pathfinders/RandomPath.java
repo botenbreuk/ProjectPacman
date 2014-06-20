@@ -18,7 +18,10 @@ import projectpacman.*;
  */
 public class RandomPath implements Pathfinder{
     
-    private Direction curDir = Direction.NONE;
+    private Direction curDir;
+    
+    public RandomPath(){ this.curDir = Direction.NONE; };
+    public RandomPath(Direction d){ this.curDir = d; };
     
     @Override
     public Tile getExit(Tile currentTile)
@@ -65,6 +68,25 @@ public class RandomPath implements Pathfinder{
                tile.getGameObject() instanceof Wall == false ||
                tile.getGameObject() instanceof GhostWall == true
                );
+    }
+    
+    @Override
+    public Direction reverseDirection(){
+        switch(curDir){
+            case NORTH:
+                curDir = Direction.SOUTH;
+                break;
+            case SOUTH:
+                curDir = Direction.NORTH;
+                break;
+            case EAST:
+                curDir = Direction.WEST;
+                break;
+            case WEST:
+                curDir = Direction.EAST;
+                break;
+        }
+        return curDir;
     }
     
     @Override

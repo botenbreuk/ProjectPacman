@@ -4,16 +4,15 @@
  * and open the template in the editor.
  */
 
-package Interfaces;
-
-import projectpacman.*;
+package Enums;
 
 /**
  *
  * @author Bouke
  */
-public interface Pathfinder {
-    public Tile getExit(Tile tile);
-    public Direction reverseDirection();
-    public Direction getCurDir();
+public enum GameState {
+    PLAY,
+    PAUSE,
+    SUPERPACMAN,
+    GAMEOVER;
 }

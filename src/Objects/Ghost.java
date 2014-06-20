@@ -6,6 +6,7 @@
 
 package Objects;
 
+import Enums.GhostState;
 import Pathfinders.RandomPath;
 import Interfaces.Pathfinder;
 import Interfaces.GamePanel;
@@ -26,23 +27,31 @@ import projectpacman.Tile;
  * @author Robin
  */
 public class Ghost extends MovingObject{
-    private GhostState state;
+    private int speed;
+    private final GhostState defaultState;
+    private GhostState currentState;
     private Pathfinder pathfinder;
-    private String[] imgSet;
+    private final String[] imgSet;
     
     public Ghost(GamePanel playfield, Tile startingTile, GhostState state, String[] imgSet)
     {
         super(playfield, startingTile);
-        this.state = state;
+        speed = 250;
+        this.defaultState = state;
+        currentState = defaultState;
         this.imgSet = imgSet;
-        initPathfinder();
+        setPathfinder();
 	Timer timer = new Timer();
 	timer.schedule(new TimerTask() {
             private final Random random = new Random();
 	    @Override
 	    public void run() 
 	    {
-                Tile t = pathfinder.getExit(getTile());
+                Tile t = null;
+                if(pathfinder != null)
+                {
+                    t = pathfinder.getExit(getTile());
+                }
                 if(t != null)
 		{
                     move(t);
@@ -55,17 +64,30 @@ public class Ghost extends MovingObject{
                 }
 	    }
 	    
-	} , 0, 250);
+	} , 0, speed);
     }
     
-    private void initPathfinder(){
-        switch(state){
-            case DUMB:
-                pathfinder = new RandomPath();
-                break;
-            case SMART:
-                pathfinder = new Breadthfirst();
-                break;
+    public GhostState getState(){ return currentState; }
+    public void resetState(){ currentState = defaultState; };
+    public void setState(GhostState state){ 
+        this.currentState = state; 
+        setPathfinder();
+    }
+    
+    private void setPathfinder(){
+        switch(currentState){
+        case DUMB:
+            pathfinder = new RandomPath();
+            break;
+        case SMART:
+            pathfinder = new Breadthfirst();
+            break;
+        case EATEN:
+            pathfinder = null;
+            break;
+        case SCARED:
+            pathfinder = new RandomPath(pathfinder.reverseDirection());
+            break;
         }
     }
     
@@ -75,15 +97,23 @@ public class Ghost extends MovingObject{
 	//Tile tile = super.getTile().getNeigbour(d);
         //curDir = d;
         
-        if(t.getGameObject() instanceof Pacman){
-            //System.out.println("Ik ben op pacman");
-            gamePanel.restart();
-        }else{
+        if(!(t.getGameObject() instanceof Pacman)){
             super.getTile().removeGameObject();
             t.addGameObject(this);
             super.setTile(t);
             super.gamePanel.paintComponent();
+        }else{
+            if(currentState != GhostState.SCARED && currentState != GhostState.EATEN){
+                //System.out.println("Ik ben op pacman");
+                gamePanel.restart();
+            }else{
+                setState(GhostState.EATEN);
+            }
         }
+    }
+    
+    public void setSpeed(int speed){
+        this.speed = speed;
     }
 
     @Override
@@ -104,25 +134,28 @@ public class Ghost extends MovingObject{
         //g.fillOval(x, y, tile.getWidth(), tile.getHeight());
         try 
         {
-            BufferedImage img;
-            switch(pathfinder.getCurDir()) {
-            case NORTH:
-                img = ImageIO.read(getClass().getResourceAsStream(imgSet[0]));
-                break;
-            case SOUTH:
-                img = ImageIO.read(getClass().getResourceAsStream(imgSet[1]));
-                break;
-            case EAST:
-                img = ImageIO.read(getClass().getResourceAsStream(imgSet[2]));
-                break;
-            case WEST:
-                img = ImageIO.read(getClass().getResourceAsStream(imgSet[3]));
-                break;
-            default:
-                img = ImageIO.read(getClass().getResourceAsStream(imgSet[4]));
-                break;
+            BufferedImage img = ImageIO.read(getClass().getResourceAsStream(imgSet[4]));
+                if(currentState != GhostState.SCARED){
+                    if(pathfinder != null){
+                    switch(pathfinder.getCurDir()) {
+                    case NORTH:
+                        img = ImageIO.read(getClass().getResourceAsStream(imgSet[0]));
+                        break;
+                    case SOUTH:
+                        img = ImageIO.read(getClass().getResourceAsStream(imgSet[1]));
+                        break;
+                    case EAST:
+                        img = ImageIO.read(getClass().getResourceAsStream(imgSet[2]));
+                        break;
+                    case WEST:
+                        img = ImageIO.read(getClass().getResourceAsStream(imgSet[3]));
+                        break;
+                    }
+                }
+            }else{
+                img = ImageIO.read(getClass().getResourceAsStream(imgSet[5]));
             }
-
+            
             g.drawImage(img, x, y, null);
         }
         catch (IOException ex)

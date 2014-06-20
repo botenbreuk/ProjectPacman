@@ -116,6 +116,25 @@ public class Breadthfirst implements Pathfinder{
     }
     
     @Override
+    public Direction reverseDirection(){
+        switch(curDir){
+            case NORTH:
+                curDir = Direction.SOUTH;
+                break;
+            case SOUTH:
+                curDir = Direction.NORTH;
+                break;
+            case EAST:
+                curDir = Direction.WEST;
+                break;
+            case WEST:
+                curDir = Direction.EAST;
+                break;
+        }
+        return curDir;
+    }
+    
+    @Override
     public Direction getCurDir(){
         return curDir;
     }

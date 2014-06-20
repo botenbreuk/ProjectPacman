@@ -26,6 +26,6 @@ public class GhostWall extends Wall
         //Random random = new Random();
 	//g.setColor(new Color(random.nextInt(255), random.nextInt(255), random.nextInt(255)));
         g.setColor(new Color(255, 255 ,255));
-	g.fillRect(x, y, tile.getWidth(), tile.getHeight() / 4);
+	g.fillRect(x, y, tile.getWidth() - 2, tile.getHeight() / 4);
     }
 }

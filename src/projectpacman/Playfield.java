@@ -6,11 +6,12 @@
 
 package projectpacman;
 
+import Enums.GameState;
+import Enums.GhostState;
 import Interfaces.GamePanel;
 import Objects.Dot;
 import Objects.GameObject;
 import Objects.Ghost;
-import Objects.GhostState;
 import Objects.GhostWall;
 import Objects.MovingObject;
 import Objects.Pacman;
@@ -18,6 +19,8 @@ import Objects.SuperDot;
 import Objects.Wall;
 import java.awt.*;
 import java.awt.event.KeyListener;
+import java.util.TimerTask;
+import java.util.Timer;
 import javax.swing.*;
 
 /**
@@ -26,12 +29,14 @@ import javax.swing.*;
  */
 public final class Playfield extends JPanel implements GamePanel
 {
+    private Timer timer = new Timer();
     private int levelNumber;
     private Tile[][] level;
     private int[][] template;
     private int maxScore = 0;
     private int score = 0;
     private String time;
+    private GameState state;
     
     public int getScore() { return this.score; };
     public String getTime() { return this.time; }
@@ -40,48 +45,60 @@ public final class Playfield extends JPanel implements GamePanel
     public void addScore(int score){ this.score += score; }
     //public void resetScore() { this.score = 0; }
     
-    private String[] imgBlinky = new String[]{
+    private final String[] imgBlinky = new String[]{
         "/images/BlinkyUp.png",
         "/images/BlinkyDown.png",
         "/images/BlinkyRight.png",
         "/images/BlinkyLeft.png",
-        "/images/BlinkyIdle.png"
+        "/images/BlinkyIdle.png",
+        "/images/Scared1.png",
+        "/images/ScaredInverse1.png"
     };
             
-    private String[] imgInky = new String[]{
+    private final String[] imgInky = new String[]{
         "/images/InkyUp.png",
         "/images/InkyDown.png",
         "/images/InkyRight.png",
         "/images/InkyLeft.png",
-        "/images/InkyIdle.png"
+        "/images/InkyIdle.png",
+        "/images/Scared2.png",
+        "/images/ScaredInverse2.png"
     };
     
-    private String[] imgPinky = new String[]{
+    private final String[] imgPinky = new String[]{
         "/images/PinkyUp.png",
         "/images/PinkyDown.png",
         "/images/PinkyRight.png",
         "/images/PinkyLeft.png",
-        "/images/PinkyIdle.png"
+        "/images/PinkyIdle.png",
+        "/images/Scared3.png",
+        "/images/ScaredInverse3.png"
+        
     };
     
-    private String[] imgClyde = new String[]{
+    private final String[] imgClyde = new String[]{
         "/images/ClydeUp.png",
         "/images/ClydeDown.png",
         "/images/ClydeRight.png",
         "/images/ClydeLeft.png",
-        "/images/ClydeIdle.png"
+        "/images/ClydeIdle.png",
+        "/images/Scared4.png",
+        "/images/ScaredInverse4.png"
     };
     
-    private String[] imgDerpy = new String[]{
+    private final String[] imgDerpy = new String[]{
         "/images/DerpyUp.png",
         "/images/DerpyDown.png",
         "/images/DerpyRight.png",
         "/images/DerpyLeft.png",
-        "/images/DerpyIdle.png"
+        "/images/DerpyRight.png",
+        "/images/Scared1.png",
+        "/images/ScaredInverse1.png"
     };
     
     public Playfield()
     {
+        state = GameState.PLAY;
         this.levelNumber = 1;
 	this.setVisible(true);
 	initLevel();
@@ -104,11 +121,11 @@ public final class Playfield extends JPanel implements GamePanel
 	    {11, 11, 11, 11, 14, 11, 14, 11, 11, 12, 11, 11, 14, 11, 14, 11, 11, 11, 11},
 	    {14, 14, 14, 14, 14, 14, 14, 11, 21, 22, 23, 11, 14, 14, 14, 14, 14, 14, 14},
 	    {11, 11, 11, 11, 14, 11, 14, 11, 11, 11, 11, 11, 14, 11, 14, 11, 11, 11, 11},
-	    {10, 10, 10, 11, 14, 11, 14, 14, 14, 19, 14, 14, 14, 11, 14, 11, 10, 10, 10},
+	    {10, 10, 10, 11, 14, 11, 14, 14, 14, 14, 14, 14, 14, 11, 14, 11, 10, 10, 10},
 	    {11, 11, 11, 11, 14, 11, 14, 11, 11, 11, 11, 11, 14, 11, 14, 11, 11, 11, 11},
 	    {11, 14, 14, 14, 14, 14, 14, 14, 14, 11, 14, 14, 14, 14, 14, 14, 14, 14, 11},
 	    {11, 14, 11, 11, 14, 11, 11, 11, 14, 11, 14, 11, 11, 11, 14, 11, 11, 14, 11},
-	    {11, 14, 14, 11, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 11, 14, 14, 11},
+	    {11, 14, 14, 11, 14, 14, 14, 14, 14, 19, 14, 14, 14, 14, 14, 11, 14, 14, 11},
 	    {11, 11, 14, 11, 14, 11, 14, 11, 11, 11, 11, 11, 14, 11, 14, 11, 14, 11, 11},
 	    {11, 14, 14, 14, 14, 11, 14, 14, 14, 11, 14, 14, 14, 11, 14, 14, 14, 14, 11},
 	    {11, 15, 11, 11, 11, 11, 11, 11, 14, 11, 14, 11, 11, 11, 11, 11, 11, 15, 11},
@@ -121,9 +138,9 @@ public final class Playfield extends JPanel implements GamePanel
 	    {11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11},
 	    {11, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 11},
 	    {11, 14, 11, 11, 14, 11, 14, 11, 11, 11, 11, 11, 14, 11, 14, 11, 11, 14, 11},
-	    {11, 14, 11, 11, 14, 11, 14, 11, 19, 19, 19, 11, 14, 11, 14, 11, 11, 14, 11},
+	    {11, 14, 11, 11, 14, 11, 14, 11, 21, 22, 23, 11, 14, 11, 14, 11, 11, 14, 11},
 	    {11, 14, 14, 14, 14, 14, 14, 11, 11, 12, 11, 11, 14, 14, 14, 14, 14, 14, 11},
-	    {11, 11, 11, 11, 14, 11, 14, 14, 14, 10, 14, 14, 14, 11, 14, 11, 11, 11, 11},
+	    {11, 11, 11, 11, 14, 11, 14, 14, 14, 20, 14, 14, 14, 11, 14, 11, 11, 11, 11},
 	    {14, 14, 14, 14, 14, 11, 14, 14, 14, 11, 14, 14, 14, 11, 14, 14, 14, 14, 14},
 	    {11, 11, 11, 11, 14, 11, 11, 11, 14, 11, 14, 11, 11, 11, 14, 11, 11, 11, 11},
 	    {11, 14, 14, 14, 14, 11, 14, 14, 14, 14, 14, 14, 14, 11, 14, 14, 14, 14, 11},
@@ -134,7 +151,7 @@ public final class Playfield extends JPanel implements GamePanel
 	    {11, 11, 11, 11, 14, 11, 14, 11, 11, 11, 11, 11, 14, 11, 14, 11, 11, 11, 11},
 	    {11, 14, 14, 14, 14, 14, 14, 14, 14, 11, 14, 14, 14, 14, 14, 14, 14, 14, 11},
 	    {11, 14, 11, 11, 14, 11, 11, 11, 14, 11, 14, 11, 11, 11, 14, 11, 11, 14, 11},
-	    {11, 14, 14, 11, 14, 14, 11, 14, 14, 18, 14, 14, 11, 14, 14, 11, 14, 14, 11},
+	    {11, 14, 14, 11, 14, 14, 11, 14, 14, 19, 14, 14, 11, 14, 14, 11, 14, 14, 11},
 	    {11, 14, 14, 14, 11, 14, 14, 14, 11, 11, 11, 14, 14, 14, 11, 14, 14, 14, 11},
 	    {11, 14, 11, 14, 14, 11, 11, 14, 14, 14, 14, 14, 11, 11, 14, 14, 11, 14, 11},
 	    {11, 14, 11, 11, 14, 14, 11, 11, 11, 11, 11, 11, 11, 14, 14, 11, 11, 14, 11},
@@ -145,7 +162,7 @@ public final class Playfield extends JPanel implements GamePanel
 	int[][] level3 = new int[][]
 	{
 	    {11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11},
-	    {11, 19, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 19, 11},
+	    {11, 24, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 24, 11},
 	    {11, 14, 11, 11, 11, 14, 11, 11, 11, 14, 11, 11, 11, 14, 11, 11, 11, 14, 11},
 	    {11, 14, 11, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 11, 14, 11},
 	    {11, 14, 11, 14, 11, 11, 11, 11, 14, 14, 14, 11, 11, 11, 11, 14, 11, 14, 11},
@@ -164,7 +181,7 @@ public final class Playfield extends JPanel implements GamePanel
 	    {11, 14, 11, 14, 11, 11, 11, 14, 11, 11, 11, 14, 11, 11, 11, 14, 11, 14, 11},
 	    {11, 14, 11, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 11, 14, 11},
 	    {11, 14, 11, 11, 11, 14, 11, 11, 11, 14, 11, 11, 11, 14, 11, 11, 11, 14, 11},
-	    {11, 19, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 19, 11},
+	    {11, 24, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 24, 11},
 	    {11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11}
 	};
 	
@@ -311,6 +328,59 @@ public final class Playfield extends JPanel implements GamePanel
                 GameObject object = level[i][j].getGameObject();
                 if(object instanceof MovingObject){
                     ((MovingObject)object).resetPosition();
+                }
+                if(object instanceof Ghost){
+                    ((Ghost)object).resetState();
+                }
+            }
+        }
+        setGameState(GameState.PLAY);
+    }
+    
+    @Override
+    public void setGameState(GameState newState){
+        state = newState;
+        switch(state){
+        case SUPERPACMAN:
+            scareGhosts();
+            
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    setGameState(GameState.PLAY);
+                    unScareGhosts();
+                    this.cancel();
+                }
+            }, 10000);
+
+            break;
+        }
+    }
+    
+    private void scareGhosts(){
+        for(int i = 0; i < level.length; i++) 
+        {
+            for(int j = 0; j < level[0].length; j++) 
+            {
+                GameObject object = level[i][j].getGameObject();
+                if(object instanceof Ghost){
+                    if(((Ghost)object).getState() != GhostState.SCARED && 
+                       ((Ghost)object).getState() != GhostState.EATEN)
+                        ((Ghost)object).setState(GhostState.SCARED);
+                }
+            }
+        }
+    }
+    
+    private void unScareGhosts(){
+        for(int i = 0; i < level.length; i++) 
+        {
+            for(int j = 0; j < level[0].length; j++) 
+            {
+                GameObject object = level[i][j].getGameObject();
+                if(object instanceof Ghost){
+                    if(((Ghost)object).getState() == GhostState.SCARED)
+                        ((Ghost)object).resetState();
                 }
             }
         }
