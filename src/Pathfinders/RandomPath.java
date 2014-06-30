@@ -6,6 +6,7 @@
 
 package Pathfinders;
 
+import Enums.Direction;
 import Interfaces.Pathfinder;
 import Objects.*;
 import java.util.LinkedList;
@@ -57,9 +58,10 @@ public class RandomPath implements Pathfinder{
             }
             
             return exit;
-        }else
+        }else{
             curDir = Direction.NONE;
             return null;
+	}
     }
     
     private boolean canMoveTo(Tile tile)

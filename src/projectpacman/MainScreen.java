@@ -9,7 +9,6 @@ package projectpacman;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.util.TimerTask;
 import javax.swing.*;
 
 /**
@@ -18,11 +17,6 @@ import javax.swing.*;
  */
 public class MainScreen extends JFrame 
 {
-    private JPanel infoPanel;
-    private JLabel scoreLabel;
-    private JLabel timeLabel;
-    private JLabel curTime;
-    private JPanel timeCont;
     private JPanel panel;
     private JPanel fieldCont;
     private JButton close;
@@ -30,23 +24,16 @@ public class MainScreen extends JFrame
     private JButton restart;
     
     private Playfield playfield;
-    private java.util.Timer timer;
     
     public MainScreen()
     {
 	// Het creëren van het frame
 	initComponents();
-	startTime();
     }
     
     private void initComponents()// <editor-fold defaultstate="collapsed" desc="InitComponents">
         {	
 	// Aanmaken van de objecten
-	infoPanel = new JPanel();
-	scoreLabel = new JLabel("Score:");
-	timeLabel = new JLabel("Time:");
-	curTime = new JLabel("00:00:00");
-	timeCont = new JPanel();
 	panel = new JPanel();
 	fieldCont = new JPanel();
 	restart = new JButton("Herstarten");
@@ -68,11 +55,8 @@ public class MainScreen extends JFrame
 	close.addActionListener(this::closeActionPerformed);
 	
 	// Verandering van de default layout van JComponets
-	infoPanel.setLayout(new BorderLayout());
 	
 	// Afemetingen objecten
-	infoPanel.setPreferredSize(new Dimension(this.getWidth(), 20));
-	timeCont.setPreferredSize(new Dimension(110, 20));
 	panel.setPreferredSize(new Dimension(this.getWidth(), 30));
 	fieldCont.setPreferredSize(new Dimension(this.getWidth()- 20, 555));
 	start.setPreferredSize(new Dimension(90, 20));
@@ -81,17 +65,12 @@ public class MainScreen extends JFrame
 	playfield.setPreferredSize(new Dimension(this.getWidth(), 550));
 	
 	// Toevoegen van objecten aan JComponents
-	infoPanel.add(scoreLabel, BorderLayout.WEST);
-	infoPanel.add(timeCont, BorderLayout.EAST);
-	timeCont.add(timeLabel);
-	timeCont.add(curTime);
 	panel.add(start);
 	panel.add(restart);
 	panel.add(close);
 	fieldCont.add(playfield);
 	
 	// JComponents toevoegen aan het frame
-	this.add(infoPanel, BorderLayout.NORTH);
 	this.add(fieldCont, BorderLayout.CENTER);
 	this.add(panel, BorderLayout.SOUTH);
 	
@@ -100,39 +79,6 @@ public class MainScreen extends JFrame
 	
 	pack();
     }//</editor-fold>
-    
-    private void startTime()
-    {
-	if(timer != null)
-	{
-	    timer.cancel();
-	    timer = null;
-	    startTime();
-	}
-	else
-	{
-	    timer = new java.util.Timer();
-	    timer.schedule(new TimerTask() 
-	    {
-		private int minutes = 99;
-		private int seconds = 57;
-		@Override
-		public void run() {
-
-		    if(seconds < 59)
-		    {
-			seconds += 1;
-		    }
-		    else
-		    {
-			seconds = 0;
-			minutes += 1;
-		    }
-		    curTime.setText(String.format("%02d", minutes) + ":" + String.format("%02d", seconds));
-		}
-	    }, 0, 1000);
-	}
-    }
     
     private void closeActionPerformed(ActionEvent e)
     {
@@ -146,6 +92,7 @@ public class MainScreen extends JFrame
     
     private void restartActionPerformed(ActionEvent e)
     {
-        
+        playfield.restart();
+	playfield.requestFocus();
     }
 }

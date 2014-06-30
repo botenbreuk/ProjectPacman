@@ -6,6 +6,7 @@
 
 package Interfaces;
 
+import Enums.Direction;
 import projectpacman.*;
 
 /**

@@ -6,7 +6,10 @@
 
 package projectpacman;
 
+import Enums.Direction;
 import Objects.GameObject;
+import Objects.Ghost;
+import Objects.Pacman;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.HashMap;
@@ -34,7 +37,24 @@ public class Tile
     
     public void setNeighbour(Direction dir, Tile tile) { this.neighbours.put(dir, tile); }
     public void addGameObject(GameObject gameObject) { this.gameObjects.push(gameObject); }
-    public GameObject removeGameObject() { return this.gameObjects.pop(); }
+    public GameObject removeGameObject() { return !gameObjects.empty() ? this.gameObjects.pop() : null; }
+    public void resetGameObjects() 
+    {
+	for (int i = 0; i < gameObjects.size(); i++) 
+	{
+	    GameObject object = gameObjects.get(i);
+	    if(object instanceof Pacman)
+	    {
+		((Pacman) object).stopTimer();
+	    }
+	    if(object instanceof Ghost)
+	    {
+		((Ghost) object).stopTimer();
+	    }
+	    gameObjects.remove(i);
+	}
+	
+    }
     
     public Tile(int xPos, int yPos)
     {

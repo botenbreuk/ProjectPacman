@@ -6,6 +6,7 @@
 
 package Pathfinders;
 
+import Enums.Direction;
 import Interfaces.Pathfinder;
 import Objects.*;
 import java.util.Collections;

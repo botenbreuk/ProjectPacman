@@ -7,7 +7,6 @@
 package Objects;
 
 import Interfaces.GamePanel;
-import projectpacman.Direction;
 import projectpacman.Tile;
 
 /**
@@ -15,6 +14,7 @@ import projectpacman.Tile;
  * @author Bouke
  */
 public abstract class MovingObject extends GameObject{
+    
     protected Tile startingTile;
     protected GamePanel gamePanel;
     

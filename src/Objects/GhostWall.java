@@ -8,7 +8,6 @@ package Objects;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.Random;
 import projectpacman.Tile;
 
 /**

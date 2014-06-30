@@ -13,8 +13,8 @@ import Enums.GameState;
  * @author Bouke
  */
 public interface GamePanel {
-    public void paintComponent();
+    public void redraw();
     public void addScore(int amount);
-    public void restart();
-    public void setGameState(GameState state);
+    public void restartPositions();
+    public void setGameState(GameState gameState);
 }

@@ -14,7 +14,6 @@ import Pathfinders.Breadthfirst;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
@@ -27,6 +26,8 @@ import projectpacman.Tile;
  * @author Robin
  */
 public class Ghost extends MovingObject{
+
+    private Timer timer;
     private int speed;
     private final GhostState defaultState;
     private GhostState currentState;
@@ -41,9 +42,13 @@ public class Ghost extends MovingObject{
         currentState = defaultState;
         this.imgSet = imgSet;
         setPathfinder();
-	Timer timer = new Timer();
+	startTimer();
+    }
+    
+    private void startTimer()
+    {
+	timer = new Timer();
 	timer.schedule(new TimerTask() {
-            private final Random random = new Random();
 	    @Override
 	    public void run() 
 	    {
@@ -56,17 +61,15 @@ public class Ghost extends MovingObject{
 		{
                     move(t);
                 }
-		else
-		{
-                    //Omdat een spook niet opeens om mag draaien, 
-                    //word de direction gereset bij een doodlopend punt.
-                    //curDir = Direction.NONE;
-                }
 	    }
 	    
 	} , 0, speed);
     }
-    
+    public void stopTimer()
+    {
+	timer.cancel();
+	timer = null;
+    }
     public GhostState getState(){ return currentState; }
     public void resetState(){ setState(defaultState); };
     public void setState(GhostState state){ 
@@ -101,11 +104,11 @@ public class Ghost extends MovingObject{
             super.getTile().removeGameObject();
             t.addGameObject(this);
             super.setTile(t);
-            super.gamePanel.paintComponent();
+            super.gamePanel.redraw();
         }else{
             if(currentState != GhostState.SCARED && currentState != GhostState.EATEN){
                 //System.out.println("Ik ben op pacman");
-                gamePanel.restart();
+                gamePanel.restartPositions();
             }else{
                 setState(GhostState.EATEN);
             }

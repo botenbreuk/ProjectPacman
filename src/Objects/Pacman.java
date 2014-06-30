@@ -13,7 +13,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Timer;
 import java.util.TimerTask;
-import projectpacman.Direction;
+import Enums.Direction;
 import Interfaces.GamePanel;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -27,14 +27,20 @@ import projectpacman.Tile;
  */
 public class Pacman extends MovingObject implements KeyListener
 {
+    private Timer timer;
     private Direction direction = Direction.WEST;
     private Direction preferredDirection = Direction.WEST;
-    String currentImagePath = "/images/PacManClosed.png";
+    private String currentImagePath = "/images/PacManClosed.png";
     
     public Pacman(GamePanel playfield, Tile startingTile)
     {
         super(playfield, startingTile);
-        Timer timer = new Timer();
+	startTimer();
+    }
+    
+    private void startTimer()
+    {
+	timer = new Timer();
 	timer.schedule(new TimerTask() {
             @Override
             public void run(){
@@ -42,6 +48,12 @@ public class Pacman extends MovingObject implements KeyListener
                 move(getTile(direction));
             }
         }, 0, 250);
+    }
+    
+    public void stopTimer()
+    {
+	timer.cancel();
+	timer = null;
     }
     
     private Tile getTile(Direction d){
@@ -78,14 +90,14 @@ public class Pacman extends MovingObject implements KeyListener
     protected void move(Tile t)
     {
         if(t != null){
-           GameObject object = t.getGameObject();
+	    GameObject object = t.getGameObject();
             if(object instanceof Wall == false)
             {
                 eat(object, t);
                 super.getTile().removeGameObject();
                 t.addGameObject(this);
                 super.setTile(t);
-                super.gamePanel.paintComponent();
+                super.gamePanel.redraw();
                 setImagePath();
             } 
         }
@@ -115,7 +127,7 @@ public class Pacman extends MovingObject implements KeyListener
             if(((Ghost)object).getState() == GhostState.SCARED){
                 ((Ghost)object).setState(GhostState.EATEN);
             }else if(((Ghost)object).getState() != GhostState.EATEN){
-                gamePanel.restart();
+                gamePanel.restartPositions();
             }
         }
     }
