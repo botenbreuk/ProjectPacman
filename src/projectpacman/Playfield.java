@@ -349,6 +349,22 @@ public final class Playfield extends JPanel implements GamePanel
         }
     }
     
+    
+    public void pauze()
+    {
+	for (int i = 0; i < level.length; i++) 
+        {
+            for (int j = 0; j < level[0].length; j++) 
+            {
+		GameObject object = level[i][j].getGameObject();
+                if(object != null && object instanceof Ghost)
+                {
+                    ((Ghost) object).stopTimer();
+                }
+            }
+        }
+    }
+    
     private void emptyField()
     {
 	for (int i = 0; i < level.length; i++) 

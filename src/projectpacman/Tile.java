@@ -26,7 +26,7 @@ public class Tile
     private final int xPos;
     private final int yPos;
     private final HashMap<Direction, Tile> neighbours;
-    private final Stack<GameObject> gameObjects;
+    private Stack<GameObject> gameObjects;
     
     public Tile getNeigbour(Direction direction) { return this.neighbours.get(direction); }
     public GameObject getGameObject() { return !gameObjects.empty() ? this.gameObjects.peek() : null; }
@@ -50,10 +50,11 @@ public class Tile
 	    if(object instanceof Ghost)
 	    {
 		((Ghost) object).stopTimer();
+		((Ghost) object).resetState();
 	    }
 	    gameObjects.remove(i);
 	}
-	
+	gameObjects = null;
     }
     
     public Tile(int xPos, int yPos)

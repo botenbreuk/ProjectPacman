@@ -9,6 +9,8 @@ package projectpacman;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 
 /**
@@ -22,6 +24,7 @@ public class MainScreen extends JFrame
     private JButton close;
     private JButton start;
     private JButton restart;
+    private JButton pauze;
     
     private Playfield playfield;
     
@@ -39,6 +42,7 @@ public class MainScreen extends JFrame
 	restart = new JButton("Herstarten");
 	start = new JButton("Starten");
 	close = new JButton("Sluiten");
+	pauze = new JButton("Pauzeren");
 	playfield = new Playfield();
         
 	// Setup JFrame
@@ -53,6 +57,7 @@ public class MainScreen extends JFrame
 	start.addActionListener(this::startActionPerformed);
 	restart.addActionListener(this::restartActionPerformed);
 	close.addActionListener(this::closeActionPerformed);
+	pauze.addActionListener(this::pauzeActionPerformed);
 	
 	// Verandering van de default layout van JComponets
 	
@@ -62,12 +67,14 @@ public class MainScreen extends JFrame
 	start.setPreferredSize(new Dimension(90, 20));
 	restart.setPreferredSize(new Dimension(110, 20));
 	close.setPreferredSize(new Dimension(80, 20));
+	pauze.setPreferredSize(new Dimension(120, 20));
 	playfield.setPreferredSize(new Dimension(this.getWidth(), 550));
 	
 	// Toevoegen van objecten aan JComponents
 	panel.add(start);
 	panel.add(restart);
 	panel.add(close);
+	panel.add(pauze);
 	fieldCont.add(playfield);
 	
 	// JComponents toevoegen aan het frame
@@ -93,6 +100,12 @@ public class MainScreen extends JFrame
     private void restartActionPerformed(ActionEvent e)
     {
         playfield.restart();
+	playfield.requestFocus();
+    }
+    
+    private void pauzeActionPerformed(ActionEvent e)
+    {
+	playfield.pauze();
 	playfield.requestFocus();
     }
 }

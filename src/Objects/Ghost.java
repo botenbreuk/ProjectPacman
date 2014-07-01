@@ -65,11 +65,14 @@ public class Ghost extends MovingObject{
 	    
 	} , 0, speed);
     }
+    
     public void stopTimer()
     {
+	pathfinder = null;
 	timer.cancel();
 	timer = null;
     }
+    
     public GhostState getState(){ return currentState; }
     public void resetState(){ setState(defaultState); };
     public void setState(GhostState state){ 
