@@ -20,6 +20,7 @@ import Objects.SuperDot;
 import Objects.Wall;
 import java.awt.*;
 import java.awt.event.KeyListener;
+import java.util.Stack;
 import java.util.TimerTask;
 import java.util.Timer;
 import javax.swing.*;
@@ -38,6 +39,8 @@ public final class Playfield extends JPanel implements GamePanel
     private int score = 0;
     private String time;
     private GameState state;
+    
+    public GameState getState() { return this.state; }
     
     @Override
     public void addScore(int score){ this.score += score; }
@@ -349,17 +352,34 @@ public final class Playfield extends JPanel implements GamePanel
         }
     }
     
-    
-    public void pauze()
+    public void start()
     {
-	for (int i = 0; i < level.length; i++) 
+        for (int i = 0; i < level.length; i++) 
         {
             for (int j = 0; j < level[0].length; j++) 
             {
-		GameObject object = level[i][j].getGameObject();
+                GameObject object = level[i][j].getGameObject();
                 if(object != null && object instanceof Ghost)
                 {
-                    ((Ghost) object).stopTimer();
+                    ((Ghost) object).pauzeTimer(false);
+                }
+            }
+        }
+    }
+    
+    public void pauze()
+    {
+        for (int i = 0; i < level.length; i++) 
+        {
+            for (int j = 0; j < level[0].length; j++) 
+            {
+                Stack<GameObject> objects = level[i][j].getGameObjects();
+                for(GameObject object : objects)
+                {
+                    if(object != null && object instanceof Ghost)
+                    {
+                        ((Ghost) object).pauzeTimer(true);
+                    }
                 }
             }
         }

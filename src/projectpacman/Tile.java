@@ -29,6 +29,7 @@ public class Tile
     private Stack<GameObject> gameObjects;
     
     public Tile getNeigbour(Direction direction) { return this.neighbours.get(direction); }
+    public Stack<GameObject> getGameObjects() { return this.gameObjects; }
     public GameObject getGameObject() { return !gameObjects.empty() ? this.gameObjects.peek() : null; }
     public int getXPos() { return this.xPos; }
     public int getYPos() { return this.yPos; }

@@ -6,11 +6,10 @@
 
 package projectpacman;
 
+import Enums.GameState;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 
 /**
@@ -105,7 +104,18 @@ public class MainScreen extends JFrame
     
     private void pauzeActionPerformed(ActionEvent e)
     {
-	playfield.pauze();
-	playfield.requestFocus();
+        GameState state = playfield.getState();
+        if(state == GameState.PAUSE)
+        {
+            playfield.setGameState(GameState.PLAY);
+            playfield.start();
+            playfield.requestFocus();
+        }
+        else
+        {
+            playfield.setGameState(GameState.PAUSE);
+            playfield.pauze();
+        }
+	
     }
 }

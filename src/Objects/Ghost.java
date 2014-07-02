@@ -28,7 +28,7 @@ import projectpacman.Tile;
 public class Ghost extends MovingObject{
 
     private Timer timer;
-    private int speed;
+    private final int speed = 250;
     private final GhostState defaultState;
     private GhostState currentState;
     private Pathfinder pathfinder;
@@ -37,7 +37,6 @@ public class Ghost extends MovingObject{
     public Ghost(GamePanel playfield, Tile startingTile, GhostState state, String[] imgSet)
     {
         super(playfield, startingTile);
-        speed = 250;
         this.defaultState = state;
         currentState = defaultState;
         this.imgSet = imgSet;
@@ -47,32 +46,57 @@ public class Ghost extends MovingObject{
     
     private void startTimer()
     {
-	timer = new Timer();
-	timer.schedule(new TimerTask() {
-	    @Override
-	    public void run() 
-	    {
-                Tile t = null;
-                if(pathfinder != null)
+        if(timer != null)
+	{
+	    stopTimer();
+	    startTimer();
+	}
+	else
+	{
+            timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() 
                 {
-                    t = pathfinder.getExit(getTile());
+                    Tile t = null;
+                    if(pathfinder != null)
+                    {
+                        t = pathfinder.getExit(getTile());
+                    }
+                    if(t != null)
+                    {
+                        move(t);
+                    }
                 }
-                if(t != null)
-		{
-                    move(t);
-                }
-	    }
-	    
-	} , 0, speed);
+
+            } , 0, speed);
+        }
     }
     
     public void stopTimer()
     {
-	pathfinder = null;
-	timer.cancel();
-	timer = null;
+        if(timer != null)
+        {
+            pathfinder = null;
+            timer.purge();
+            timer.cancel();
+            timer = null;
+        }
     }
     
+    public void pauzeTimer(boolean pauzed)
+    {
+        if(pauzed)
+        {
+            stopTimer();
+        }
+        else
+        {
+            setPathfinder();
+            startTimer();
+        }
+    }
+            
     public GhostState getState(){ return currentState; }
     public void resetState(){ setState(defaultState); };
     public void setState(GhostState state){ 
@@ -116,10 +140,6 @@ public class Ghost extends MovingObject{
                 setState(GhostState.EATEN);
             }
         }
-    }
-    
-    public void setSpeed(int speed){
-        this.speed = speed;
     }
 
     @Override
