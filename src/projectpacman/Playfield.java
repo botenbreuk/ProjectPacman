@@ -20,6 +20,7 @@ import Objects.SuperDot;
 import Objects.Wall;
 import java.awt.*;
 import java.awt.event.KeyListener;
+import java.util.Iterator;
 import java.util.Stack;
 import java.util.TimerTask;
 import java.util.Timer;
@@ -40,7 +41,8 @@ public final class Playfield extends JPanel implements GamePanel
     private String time;
     private GameState state;
     
-    public GameState getState() { return this.state; }
+    @Override
+    public GameState getGameState() { return this.state; }
     
     @Override
     public void addScore(int score){ this.score += score; }
@@ -102,16 +104,15 @@ public final class Playfield extends JPanel implements GamePanel
         this.levelNumber = 1;
 	this.setVisible(true);
 	initLevel();
-	startTime();
+	startTimer();
     }
     
-    private void startTime()
+    private void startTimer()
     {
 	if(timer != null)
 	{
-	    timer.cancel();
-	    timer = null;
-	    startTime();
+	    stopTimer();
+	    startTimer();
 	}
 	else
 	{
@@ -137,6 +138,28 @@ public final class Playfield extends JPanel implements GamePanel
 		}
 	    }, 0, 1000);
 	}
+    }
+    
+    public void stopTimer()
+    {
+        if(timer != null)
+        {
+            timer.purge();
+            timer.cancel();
+            timer = null;
+        }
+    }
+    
+    public void pauzeTimer(boolean pauzed)
+    {
+        if(pauzed)
+        {
+            stopTimer();
+        }
+        else
+        {
+            startTimer();
+        }
     }
     
     private void setLevel()
@@ -358,13 +381,22 @@ public final class Playfield extends JPanel implements GamePanel
         {
             for (int j = 0; j < level[0].length; j++) 
             {
-                GameObject object = level[i][j].getGameObject();
-                if(object != null && object instanceof Ghost)
+                Stack<GameObject> it = level[i][j].getGameObjects();
+                for (int k = 0; k < it.size(); k++) 
                 {
-                    ((Ghost) object).pauzeTimer(false);
+                    GameObject object = it.get(k);
+                    if(object != null && object instanceof Ghost)
+                    {
+                        ((Ghost) object).pauzeTimer(false);
+                    }
+                    if(object != null && object instanceof Pacman)
+                    {
+                        ((Pacman) object).pauzeTimer(false);
+                    }
                 }
             }
         }
+        pauzeTimer(false);
     }
     
     public void pauze()
@@ -373,16 +405,34 @@ public final class Playfield extends JPanel implements GamePanel
         {
             for (int j = 0; j < level[0].length; j++) 
             {
-                Stack<GameObject> objects = level[i][j].getGameObjects();
-                for(GameObject object : objects)
+                Iterator<GameObject> it = level[i][j].getGameObjects().iterator();
+                while(it.hasNext()) 
                 {
+                    GameObject object = it.next();
                     if(object != null && object instanceof Ghost)
                     {
                         ((Ghost) object).pauzeTimer(true);
                     }
+                    if(object != null && object instanceof Pacman)
+                    {
+                        ((Pacman) object).pauzeTimer(true);
+                    }
                 }
             }
         }
+        pauzeTimer(true);
+        repaint();
+    }
+    
+    public void restart()
+    {
+	levelNumber = 1;
+	maxScore = 0;
+	score = 0;
+	emptyField();
+	initLevel();
+	startTimer();
+        repaint();
     }
     
     private void emptyField()
@@ -395,16 +445,6 @@ public final class Playfield extends JPanel implements GamePanel
 	    }
 	}
 	level = null;
-    }
-    
-    public void restart()
-    {
-	levelNumber = 1;
-	maxScore = 0;
-	score = 0;
-	emptyField();
-	initLevel();
-	startTime();
     }
     
     @Override
@@ -499,7 +539,14 @@ public final class Playfield extends JPanel implements GamePanel
 	g.setFont(new Font("default", Font.BOLD, 16));
 	g.drawString("Score: " + String.format("%06d", this.score), 10, 15);
 	g.drawString("Time: " + time, this.getWidth() - 100, 15);
-	
+	if(state == GameState.PAUSE)
+        {
+            g.setColor(Color.RED);
+            g.fillRoundRect((this.getWidth() - 200) / 2, (this.getHeight() - 60) / 2, 200, 60, 25, 25);
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 50)); 
+            g.drawString("Paused", (this.getWidth() - 170) / 2, (this.getHeight() + 35) / 2);
+        }
 	if(score >= maxScore)
 	{
 	    levelNumber++;

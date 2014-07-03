@@ -17,4 +17,5 @@ public interface GamePanel {
     public void addScore(int amount);
     public void restartPositions();
     public void setGameState(GameState gameState);
+    public GameState getGameState();
 }

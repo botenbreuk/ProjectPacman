@@ -6,6 +6,7 @@
 
 package Objects;
 
+import Enums.GameState;
 import Enums.GhostState;
 import Pathfinders.RandomPath;
 import Interfaces.Pathfinder;
@@ -77,7 +78,10 @@ public class Ghost extends MovingObject{
     {
         if(timer != null)
         {
-            pathfinder = null;
+            if(super.gamePanel.getGameState() != GameState.PAUSE)
+            {
+                pathfinder = null;
+            }
             timer.purge();
             timer.cancel();
             timer = null;

@@ -20,10 +20,10 @@ public class MainScreen extends JFrame
 {
     private JPanel panel;
     private JPanel fieldCont;
-    private JButton close;
     private JButton start;
     private JButton restart;
     private JButton pauze;
+    private JButton close;
     
     private Playfield playfield;
     
@@ -40,8 +40,8 @@ public class MainScreen extends JFrame
 	fieldCont = new JPanel();
 	restart = new JButton("Herstarten");
 	start = new JButton("Starten");
-	close = new JButton("Sluiten");
 	pauze = new JButton("Pauzeren");
+	close = new JButton("Sluiten");
 	playfield = new Playfield();
         
 	// Setup JFrame
@@ -55,8 +55,8 @@ public class MainScreen extends JFrame
 	// Knop acties
 	start.addActionListener(this::startActionPerformed);
 	restart.addActionListener(this::restartActionPerformed);
-	close.addActionListener(this::closeActionPerformed);
 	pauze.addActionListener(this::pauzeActionPerformed);
+	close.addActionListener(this::closeActionPerformed);
 	
 	// Verandering van de default layout van JComponets
 	
@@ -64,16 +64,16 @@ public class MainScreen extends JFrame
 	panel.setPreferredSize(new Dimension(this.getWidth(), 30));
 	fieldCont.setPreferredSize(new Dimension(this.getWidth()- 20, 555));
 	start.setPreferredSize(new Dimension(90, 20));
-	restart.setPreferredSize(new Dimension(110, 20));
+	restart.setPreferredSize(new Dimension(100, 20));
+	pauze.setPreferredSize(new Dimension(90, 20));
 	close.setPreferredSize(new Dimension(80, 20));
-	pauze.setPreferredSize(new Dimension(120, 20));
 	playfield.setPreferredSize(new Dimension(this.getWidth(), 550));
 	
 	// Toevoegen van objecten aan JComponents
 	panel.add(start);
 	panel.add(restart);
-	panel.add(close);
 	panel.add(pauze);
+	panel.add(close);
 	fieldCont.add(playfield);
 	
 	// JComponents toevoegen aan het frame
@@ -98,13 +98,15 @@ public class MainScreen extends JFrame
     
     private void restartActionPerformed(ActionEvent e)
     {
+        playfield.setGameState(GameState.PLAY);
         playfield.restart();
 	playfield.requestFocus();
     }
     
     private void pauzeActionPerformed(ActionEvent e)
     {
-        GameState state = playfield.getState();
+        GameState state = playfield.getGameState();
+        
         if(state == GameState.PAUSE)
         {
             playfield.setGameState(GameState.PLAY);
@@ -116,6 +118,5 @@ public class MainScreen extends JFrame
             playfield.setGameState(GameState.PAUSE);
             playfield.pauze();
         }
-	
     }
 }

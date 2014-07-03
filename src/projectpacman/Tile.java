@@ -13,6 +13,7 @@ import Objects.Pacman;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Stack;
 
 /**
@@ -41,9 +42,10 @@ public class Tile
     public GameObject removeGameObject() { return !gameObjects.empty() ? this.gameObjects.pop() : null; }
     public void resetGameObjects() 
     {
-	for (int i = 0; i < gameObjects.size(); i++) 
+        Iterator<GameObject> it = gameObjects.iterator();
+	while(it.hasNext()) 
 	{
-	    GameObject object = gameObjects.get(i);
+	    GameObject object = it.next();
 	    if(object instanceof Pacman)
 	    {
 		((Pacman) object).stopTimer();
@@ -53,7 +55,7 @@ public class Tile
 		((Ghost) object).stopTimer();
 		((Ghost) object).resetState();
 	    }
-	    gameObjects.remove(i);
+	    it.remove();
 	}
 	gameObjects = null;
     }

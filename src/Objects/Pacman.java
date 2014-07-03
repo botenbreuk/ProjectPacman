@@ -40,20 +40,43 @@ public class Pacman extends MovingObject implements KeyListener
     
     private void startTimer()
     {
-	timer = new Timer();
-	timer.schedule(new TimerTask() {
-            @Override
-            public void run(){
-                setDirection();
-                move(getTile(direction));
-            }
-        }, 0, 250);
+        if(timer != null)
+        {
+            stopTimer();
+        }
+        else
+        {
+            timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run(){
+                    setDirection();
+                    move(getTile(direction));
+                }
+            }, 0, 250);
+        }
     }
     
     public void stopTimer()
     {
-	timer.cancel();
-	timer = null;
+        if(timer != null)
+        {
+            timer.purge();
+            timer.cancel();
+            timer = null;
+        }
+    }
+    
+    public void pauzeTimer(boolean pauzed)
+    {
+        if(pauzed)
+        {
+            stopTimer();
+        }
+        else
+        {
+            startTimer();
+        }
     }
     
     private Tile getTile(Direction d){
