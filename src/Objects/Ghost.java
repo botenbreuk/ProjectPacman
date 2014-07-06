@@ -131,16 +131,23 @@ public class Ghost extends MovingObject{
 	//Tile tile = super.getTile().getNeigbour(d);
         //curDir = d;
         
-        if(!(t.getGameObject() instanceof Pacman)){
+        if(!(t.getGameObject() instanceof Pacman))
+        {
             super.getTile().removeGameObject();
             t.addGameObject(this);
             super.setTile(t);
             super.gamePanel.redraw();
-        }else{
-            if(currentState != GhostState.SCARED && currentState != GhostState.EATEN){
+        }
+        else
+        {
+            ((Pacman) t.getGameObject()).removeOneLive();
+            if(currentState != GhostState.SCARED && currentState != GhostState.EATEN)
+            {
                 //System.out.println("Ik ben op pacman");
                 gamePanel.restartPositions();
-            }else{
+            }
+            else
+            {
                 setState(GhostState.EATEN);
             }
         }

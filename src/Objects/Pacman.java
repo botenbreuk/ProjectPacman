@@ -31,6 +31,11 @@ public class Pacman extends MovingObject implements KeyListener
     private Direction direction = Direction.WEST;
     private Direction preferredDirection = Direction.WEST;
     private String currentImagePath = "/images/PacManClosed.png";
+    private static int lives = 3;
+    
+    public void removeOneLive() { Pacman.lives -= 1; }
+    public static void resetLives() { Pacman.lives = 3; }
+    public static int getLives() { return Pacman.lives; }
     
     public Pacman(GamePanel playfield, Tile startingTile)
     {
@@ -69,14 +74,8 @@ public class Pacman extends MovingObject implements KeyListener
     
     public void pauzeTimer(boolean pauzed)
     {
-        if(pauzed)
-        {
-            stopTimer();
-        }
-        else
-        {
-            startTimer();
-        }
+        if(pauzed) stopTimer();
+        else startTimer();
     }
     
     private Tile getTile(Direction d){
@@ -105,24 +104,37 @@ public class Pacman extends MovingObject implements KeyListener
     }
 
     @Override
-    public void keyReleased(KeyEvent e) { 
-        
-    }
+    public void keyReleased(KeyEvent e) {}
     
     @Override
     protected void move(Tile t)
     {
-        if(t != null){
-	    GameObject object = t.getGameObject();
-            if(object instanceof Wall == false)
+        if(t != null)
+        {
+            if(lives > 0)
             {
-                eat(object, t);
-                super.getTile().removeGameObject();
-                t.addGameObject(this);
-                super.setTile(t);
-                super.gamePanel.redraw();
-                setImagePath();
-            } 
+                GameObject object = t.getGameObject();
+                GameState state = super.gamePanel.getGameState();
+                if(object instanceof Wall == false)
+                {
+                    eat(object, t);
+                    super.getTile().removeGameObject();
+                    t.addGameObject(this);
+                    super.setTile(t);
+                    super.gamePanel.redraw();
+                    setImagePath();
+                }
+
+                if(object instanceof Ghost && state != GameState.SUPERPACMAN) 
+                {
+                    removeOneLive();
+                    gamePanel.restartPositions();
+                }
+            }
+	    else
+            {
+                super.gamePanel.setGameState(GameState.GAMEOVER);
+            }
         }
     }
     

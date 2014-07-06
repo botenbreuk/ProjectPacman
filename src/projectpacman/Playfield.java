@@ -429,22 +429,32 @@ public final class Playfield extends JPanel implements GamePanel
 	levelNumber = 1;
 	maxScore = 0;
 	score = 0;
-	emptyField();
+        setGameState(GameState.PLAY);
+        Pacman.resetLives();
+	emptyField(false);
 	initLevel();
 	startTimer();
         repaint();
+        
     }
     
-    private void emptyField()
+    private void emptyField(boolean gameover)
     {
 	for (int i = 0; i < level.length; i++) 
         {
             for (int j = 0; j < level[0].length; j++) 
 	    {
-		level[i][j].resetGameObjects();
+                if(level[i][j].getGameObjects() != null && !level[i][j].getGameObjects().empty())
+                {
+                    level[i][j].resetGameObjects();
+                }
 	    }
 	}
-	level = null;
+        if(!gameover)
+        {
+            level = null;
+        }
+	
     }
     
     @Override
@@ -464,7 +474,10 @@ public final class Playfield extends JPanel implements GamePanel
                 }
             }
         }
-        setGameState(GameState.PLAY);
+        if(state != GameState.GAMEOVER)
+        {
+            setGameState(GameState.PLAY);
+        }
     }
     
     @Override
@@ -472,19 +485,23 @@ public final class Playfield extends JPanel implements GamePanel
     {
         state = gameState;
         switch(state){
-        case SUPERPACMAN:
-            scareGhosts();
-            
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    setGameState(GameState.PLAY);
-                    unScareGhosts();
-                    this.cancel();
-                }
-            }, 8000);
+            case SUPERPACMAN:
+                scareGhosts();
 
-            break;
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        setGameState(GameState.PLAY);
+                        unScareGhosts();
+                        this.cancel();
+                    }
+                }, 8000);
+
+                break;
+            case GAMEOVER:
+                emptyField(true);
+                stopTimer();
+                break;
         }
     }
     
@@ -524,20 +541,31 @@ public final class Playfield extends JPanel implements GamePanel
     @Override
     public void paintComponent(Graphics g) 
     {	
-	for (int i = 0; i < level.length; i++) 
-	{
-	    for (int j = 0; j < level[0].length; j++) 
-	    {
-		GameObject gameObject = level[i][j].getGameObject();
-		Tile tile = level[i][j];
-		
-		if(tile != null) tile.draw(g);
-		if(gameObject != null) gameObject.draw(g);
-	    }
-	}
+        System.out.println(state);
+        if(state != GameState.GAMEOVER)
+        {
+            for (int i = 0; i < level.length; i++) 
+            {
+                for (int j = 0; j < level[0].length; j++) 
+                {
+                    GameObject gameObject = null;
+                    if(level[i][j].getGameObjects() != null && !level[i][j].getGameObjects().empty())
+                    {
+                        gameObject = level[i][j].getGameObject();
+                    }
+                    
+                    Tile tile = level[i][j];
+
+                    if(tile != null) tile.draw(g);
+                    if(gameObject != null) gameObject.draw(g);
+                }
+            }
+        }
+	
 	g.setColor(Color.WHITE);
 	g.setFont(new Font("default", Font.BOLD, 16));
 	g.drawString("Score: " + String.format("%06d", this.score), 10, 15);
+	g.drawString("Lives: " + Pacman.getLives(), 150, 15);
 	g.drawString("Time: " + time, this.getWidth() - 100, 15);
 	if(state == GameState.PAUSE)
         {
@@ -547,10 +575,24 @@ public final class Playfield extends JPanel implements GamePanel
             g.setFont(new Font("TimesRoman", Font.PLAIN, 50)); 
             g.drawString("Paused", (this.getWidth() - 170) / 2, (this.getHeight() + 35) / 2);
         }
+        if(state == GameState.GAMEOVER)
+        {
+            g.setColor(Color.BLACK);
+            g.fillRect(0, 0, 500, 700);
+            g.setColor(Color.RED);
+            g.fillRoundRect((this.getWidth() - 320) / 2, (this.getHeight() - 60) / 2, 320, 60, 25, 25);
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 50)); 
+            g.drawString("GAMEOVER", (this.getWidth() - 290) / 2, (this.getHeight() + 35) / 2);
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("default", Font.BOLD, 16));
+            g.drawString("Score: " + String.format("%06d", this.score), (this.getWidth() - 280) / 2, (this.getHeight() + 70) / 2);
+            g.drawString("Time: " + time, (this.getWidth() + 100) / 2, (this.getHeight() + 70) / 2);
+        }
 	if(score >= maxScore)
 	{
 	    levelNumber++;
-	    emptyField();
+	    emptyField(false);
 	    initLevel();
 	}
     }
