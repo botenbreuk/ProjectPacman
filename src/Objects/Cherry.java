@@ -6,12 +6,8 @@
 
 package Objects;
 
+import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import projectpacman.Tile;
 
 /**
@@ -32,15 +28,20 @@ public class Cherry extends GameObject
 	int x = tile.getWidth() * tile.getXPos();
 	int y = tile.getHeight() * tile.getYPos();
 	
-        try 
-        {
-            BufferedImage img = ImageIO.read(getClass().getResourceAsStream(currentImagePath));
-            g.drawImage(img, x, y, null);
-        }
-        catch (IOException ex)
-        {
-            Logger.getLogger(Ghost.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        g.setColor(Color.GREEN);
+        g.drawOval(x + 5, y + 6, 10, 10);
+        g.setColor(Color.RED);
+	g.fillOval(x + 1, y + 10, 10, 10);
+	g.fillOval(x + 10, y + 10, 10, 10);
+//        try 
+//        {
+//            BufferedImage img = ImageIO.read(getClass().getResourceAsStream(currentImagePath));
+//            g.drawImage(img, x, y, null);
+//        }
+//        catch (IOException ex)
+//        {
+//            Logger.getLogger(Ghost.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
     
 }

@@ -31,10 +31,10 @@ public class Pacman extends MovingObject implements KeyListener
     private Direction direction = Direction.WEST;
     private Direction preferredDirection = Direction.WEST;
     private String currentImagePath = "/images/PacManClosed.png";
-    private static int lives = 3;
+    private static int lives = 35;
     
     public void removeOneLive() { Pacman.lives -= 1; }
-    public static void resetLives() { Pacman.lives = 3; }
+    public static void resetLives() { Pacman.lives = 35; }
     public static int getLives() { return Pacman.lives; }
     
     public Pacman(GamePanel playfield, Tile startingTile)
@@ -154,16 +154,29 @@ public class Pacman extends MovingObject implements KeyListener
                 super.gamePanel.addScore(((SuperDot)object).getScoreValue());
                 energize();
                 tile.removeGameObject();
+                super.gamePanel.removeDot();
                 return;
             }
             super.gamePanel.addScore(((Dot)object).getScoreValue());
+            super.gamePanel.removeDot();
             tile.removeGameObject();
-        }else if(object instanceof Ghost){
-            if(((Ghost)object).getState() == GhostState.SCARED){
+        }
+        else if(object instanceof Ghost)
+        {
+            if(((Ghost)object).getState() == GhostState.SCARED)
+            {
                 ((Ghost)object).setState(GhostState.EATEN);
-            }else if(((Ghost)object).getState() != GhostState.EATEN){
+                super.gamePanel.addScore(200);
+            }
+            else if(((Ghost)object).getState() != GhostState.EATEN)
+            {
                 gamePanel.restartPositions();
             }
+        }
+        else if(object instanceof Cherry)
+        {
+            super.gamePanel.addScore(((Cherry)object).getScoreValue());
+            tile.removeGameObject();
         }
     }
 

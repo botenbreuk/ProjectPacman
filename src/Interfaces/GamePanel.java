@@ -18,4 +18,5 @@ public interface GamePanel {
     public void restartPositions();
     public void setGameState(GameState gameState);
     public GameState getGameState();
+    public void removeDot();
 }

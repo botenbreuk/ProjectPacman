@@ -149,6 +149,7 @@ public class Ghost extends MovingObject{
             else
             {
                 setState(GhostState.EATEN);
+                super.gamePanel.addScore(200);
             }
         }
     }

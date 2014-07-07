@@ -10,6 +10,7 @@ import Enums.Direction;
 import Enums.GameState;
 import Enums.GhostState;
 import Interfaces.GamePanel;
+import Objects.Cherry;
 import Objects.Dot;
 import Objects.GameObject;
 import Objects.Ghost;
@@ -36,16 +37,21 @@ public final class Playfield extends JPanel implements GamePanel
     private int levelNumber;
     private Tile[][] level;
     private int[][] template;
-    private int maxScore = 0;
     private int score = 0;
     private String time;
     private GameState state;
+    private int totalDots;
+    private int dotsSpawnCherry;
+    private boolean cherrySpawned = false;
     
     @Override
     public GameState getGameState() { return this.state; }
     
     @Override
     public void addScore(int score){ this.score += score; }
+    
+    @Override
+    public void removeDot(){ this.totalDots -= 1; }
     
     private final String[] imgBlinky = new String[]{
         "/images/BlinkyUp.png",
@@ -259,6 +265,7 @@ public final class Playfield extends JPanel implements GamePanel
     public void initLevel()
     {
 	setLevel();
+        cherrySpawned = false;
 	level = new Tile[template.length][template[0].length];
 	for (int i = 0; i < template.length; i++) 
 	{
@@ -285,13 +292,13 @@ public final class Playfield extends JPanel implements GamePanel
 			Dot dot = new Dot();
 			dot.setTile(tile);
 			tile.addGameObject(dot);
-			maxScore += dot.getScoreValue();
+			totalDots += 1;
 			break;
 		    case 15:
 			SuperDot superDot = new SuperDot();
 			superDot.setTile(tile);
 			tile.addGameObject(superDot);
-			maxScore += superDot.getScoreValue();
+			totalDots += 1;
 			break;
 		    case 19:
 			Pacman pacman = new Pacman(this, tile);
@@ -328,6 +335,7 @@ public final class Playfield extends JPanel implements GamePanel
 		level[i][j] = tile;
 	    }
 	}
+        dotsSpawnCherry = totalDots / 2;
         setNeighbours();
     }
     
@@ -427,8 +435,10 @@ public final class Playfield extends JPanel implements GamePanel
     public void restart()
     {
 	levelNumber = 1;
-	maxScore = 0;
 	score = 0;
+        totalDots = 0;
+        dotsSpawnCherry = 0;
+        cherrySpawned = false;
         setGameState(GameState.PLAY);
         Pacman.resetLives();
 	emptyField(false);
@@ -454,7 +464,6 @@ public final class Playfield extends JPanel implements GamePanel
         {
             level = null;
         }
-	
     }
     
     @Override
@@ -501,6 +510,7 @@ public final class Playfield extends JPanel implements GamePanel
             case GAMEOVER:
                 emptyField(true);
                 stopTimer();
+                redraw();
                 break;
         }
     }
@@ -538,10 +548,26 @@ public final class Playfield extends JPanel implements GamePanel
         setGameState(GameState.PLAY);
     }
     
+    private void spawnFruit()
+    {
+        for (int i = 0; i < template.length; i++)
+        {
+            for (int j = 0; j < template[0].length; j++)
+            {
+                if(template[i][j] == 19)
+                {
+                    Cherry cherry = new Cherry();
+                    cherry.setTile(level[i][j]);
+                    level[i][j].addGameObject(cherry);
+                    cherrySpawned = true;
+                }
+            }
+        }
+    }
+    
     @Override
     public void paintComponent(Graphics g) 
-    {	
-        System.out.println(state);
+    {
         if(state != GameState.GAMEOVER)
         {
             for (int i = 0; i < level.length; i++) 
@@ -567,6 +593,7 @@ public final class Playfield extends JPanel implements GamePanel
 	g.drawString("Score: " + String.format("%06d", this.score), 10, 15);
 	g.drawString("Lives: " + Pacman.getLives(), 150, 15);
 	g.drawString("Time: " + time, this.getWidth() - 100, 15);
+        
 	if(state == GameState.PAUSE)
         {
             g.setColor(Color.RED);
@@ -575,6 +602,7 @@ public final class Playfield extends JPanel implements GamePanel
             g.setFont(new Font("TimesRoman", Font.PLAIN, 50)); 
             g.drawString("Paused", (this.getWidth() - 170) / 2, (this.getHeight() + 35) / 2);
         }
+        
         if(state == GameState.GAMEOVER)
         {
             g.setColor(Color.BLACK);
@@ -589,12 +617,21 @@ public final class Playfield extends JPanel implements GamePanel
             g.drawString("Score: " + String.format("%06d", this.score), (this.getWidth() - 280) / 2, (this.getHeight() + 70) / 2);
             g.drawString("Time: " + time, (this.getWidth() + 100) / 2, (this.getHeight() + 70) / 2);
         }
-	if(score >= maxScore)
+        
+	if(totalDots == 0)
 	{
 	    levelNumber++;
-	    emptyField(false);
-	    initLevel();
+            if(levelNumber <= 3)
+            {   
+                emptyField(false);
+                initLevel();
+            }
 	}
+        System.out.println(totalDots);
+        if(!cherrySpawned && totalDots <= dotsSpawnCherry)
+        {
+            spawnFruit();
+        }
     }
 
     @Override
