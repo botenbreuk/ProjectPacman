@@ -10,15 +10,7 @@ import Enums.Direction;
 import Enums.GameState;
 import Enums.GhostState;
 import Interfaces.GamePanel;
-import Objects.Cherry;
-import Objects.Dot;
-import Objects.GameObject;
-import Objects.Ghost;
-import Objects.GhostWall;
-import Objects.MovingObject;
-import Objects.Pacman;
-import Objects.SuperDot;
-import Objects.Wall;
+import Objects.*;
 import java.awt.*;
 import java.awt.event.KeyListener;
 import java.util.Iterator;
@@ -214,9 +206,9 @@ public final class Playfield extends JPanel implements GamePanel
 	    {11, 11, 11, 11, 14, 11, 14, 11, 11, 11, 11, 11, 14, 11, 14, 11, 11, 11, 11},
 	    {11, 14, 14, 14, 14, 14, 14, 14, 14, 11, 14, 14, 14, 14, 14, 14, 14, 14, 11},
 	    {11, 14, 11, 11, 14, 11, 11, 11, 14, 11, 14, 11, 11, 11, 14, 11, 11, 14, 11},
-	    {11, 14, 14, 11, 14, 14, 11, 14, 14, 19, 14, 14, 11, 14, 14, 11, 14, 14, 11},
-	    {11, 14, 14, 14, 11, 14, 14, 14, 11, 11, 11, 14, 14, 14, 11, 14, 14, 14, 11},
-	    {11, 14, 11, 14, 14, 11, 11, 14, 14, 14, 14, 14, 11, 11, 14, 14, 11, 14, 11},
+	    {11, 14, 11, 11, 14, 14, 11, 14, 14, 19, 14, 14, 11, 14, 14, 11, 11, 14, 11},
+	    {11, 14, 14, 14, 14, 14, 14, 14, 11, 11, 11, 14, 14, 14, 14, 14, 14, 14, 11},
+	    {11, 14, 11, 11, 14, 11, 11, 14, 14, 14, 14, 14, 11, 11, 14, 11, 11, 14, 11},
 	    {11, 15, 11, 11, 14, 14, 11, 11, 11, 11, 11, 11, 11, 14, 14, 11, 11, 15, 11},
 	    {11, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 11},
 	    {11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11}
@@ -317,7 +309,7 @@ public final class Playfield extends JPanel implements GamePanel
 			tile.addGameObject(inky);
 			break;
                     case 22:
-                        Ghost pinky = new Ghost(this, tile, GhostState.SMART, imgPinky);
+                        Ghost pinky = new Ghost(this, tile, GhostState.DUMB, imgPinky);
                         pinky.setTile(tile);
 			tile.addGameObject(pinky);
 			break;
@@ -627,7 +619,6 @@ public final class Playfield extends JPanel implements GamePanel
                 initLevel();
             }
 	}
-        System.out.println(totalDots);
         if(!cherrySpawned && totalDots <= dotsSpawnCherry)
         {
             spawnFruit();

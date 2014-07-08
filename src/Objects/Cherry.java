@@ -21,7 +21,7 @@ import projectpacman.Tile;
 public class Cherry extends GameObject
 {
     private static final int scoreValue = 100;
-    private String currentImagePath = "/images/Cherry.png";
+    private final String currentImagePath = "/images/Cherry.png";
     
     public int getScoreValue() { return Cherry.scoreValue; }
     
