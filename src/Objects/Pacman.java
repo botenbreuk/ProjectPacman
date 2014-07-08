@@ -31,10 +31,10 @@ public class Pacman extends MovingObject implements KeyListener
     private Direction direction = Direction.WEST;
     private Direction preferredDirection = Direction.WEST;
     private String currentImagePath = "/images/PacManClosed.png";
-    private static int lives = 35;
+    private static int lives = 10;
     
     public void removeOneLive() { Pacman.lives -= 1; }
-    public static void resetLives() { Pacman.lives = 35; }
+    public static void resetLives() { Pacman.lives = 10; }
     public static int getLives() { return Pacman.lives; }
     
     public Pacman(GamePanel playfield, Tile startingTile)
